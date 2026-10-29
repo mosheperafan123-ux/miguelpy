@@ -1,0 +1,1255 @@
+/* ==========================================================================
+   2.3 El algoritmo de cruce
+   La pieza central: una máquina de precisión que pesa, recibe un lote,
+   puntúa cada comuna y despacha el lote por una traza de circuito.
+   Las cuatro variables se distinguen por la forma del trazo, no por el color:
+   urgencia = sólido blanco, déficit = rayado fino, cercanía = banda delgada,
+   vencimiento = sólido gris. Las mismas cuatro marcas viven en la fórmula,
+   en el dial, en las barras apiladas y en la leyenda.
+   ========================================================================== */
+
+#nucleo {
+  /* Columnas de cada puesto del ranking (la escala de la cabecera usa las mismas) */
+  --nucleo-columnas: 2rem minmax(5rem, 6.5rem) minmax(0, 1fr) 4.5rem;
+  --nucleo-hueco: 0.9rem;
+}
+
+/* ---------- Muestras de trazo (todas invariantes al escalar en X) ---------- */
+#nucleo .nucleo__muestra {
+  display: inline-block;
+  flex: none;
+  width: 1.6rem;
+  height: 0.75rem;
+}
+
+#nucleo .nucleo__muestra--urgencia,
+#nucleo .nucleo__segmento--urgencia {
+  background: var(--texto);
+}
+
+#nucleo .nucleo__muestra--deficit,
+#nucleo .nucleo__segmento--deficit {
+  background: repeating-linear-gradient(to bottom, var(--texto-2) 0 1px, transparent 1px 3px);
+}
+
+#nucleo .nucleo__muestra--cercania,
+#nucleo .nucleo__segmento--cercania {
+  background: linear-gradient(to bottom, transparent 34%, var(--texto-2) 34% 66%, transparent 66%);
+}
+
+#nucleo .nucleo__muestra--vencimiento,
+#nucleo .nucleo__segmento--vencimiento {
+  background: var(--texto-3);
+}
+
+/* ==========================================================================
+   PARTE 1 · La máquina
+   ========================================================================== */
+#nucleo .nucleo__escena {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.75rem;
+}
+
+/* Trazas de circuito: solo existen en escritorio, mientras corre la secuencia */
+#nucleo .nucleo__trazas {
+  display: none;
+}
+
+#nucleo .nucleo__traza {
+  fill: none;
+  stroke: var(--texto);
+  stroke-width: 1.25;
+  stroke-linecap: square;
+}
+
+#nucleo .nucleo__via {
+  fill: var(--texto);
+}
+
+/* ---------- Pasos de la secuencia ---------- */
+#nucleo .nucleo__pasos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem var(--gutter);
+}
+
+#nucleo .nucleo__paso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.55rem 0.6rem;
+  color: var(--texto);
+}
+
+#nucleo .nucleo__paso-numero {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+#nucleo .nucleo__paso-texto {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 88;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+#nucleo .nucleo__paso-avance {
+  position: relative;
+  grid-column: 1 / -1;
+  height: 1px;
+  overflow: hidden;
+  background: var(--borde);
+}
+
+#nucleo .nucleo__paso-avance > span {
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  transform-origin: 0 50%;
+}
+
+/* ---------- Fórmula en libro de cuentas ---------- */
+#nucleo .nucleo__formula {
+  container-type: inline-size;
+}
+
+#nucleo .nucleo__ecuacion {
+  display: grid;
+  grid-template-columns: 0.85em auto 0.55em auto minmax(0, 1fr);
+  column-gap: 0.26em;
+  row-gap: 0.1em;
+  align-items: baseline;
+  font-size: clamp(1.25rem, min(6.8cqi, 4.6svh), 2.6rem);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+}
+
+#nucleo .nucleo__sujeto {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.32em;
+  margin-bottom: 0.18em;
+  font-variation-settings: 'wdth' 114;
+  letter-spacing: -0.02em;
+}
+
+#nucleo .nucleo__igual {
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__termino {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  color: var(--texto);
+}
+
+#nucleo .nucleo__operador,
+#nucleo .nucleo__por {
+  color: var(--texto-3);
+  text-align: center;
+}
+
+#nucleo .nucleo__coef {
+  font-size: 0.84em;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+#nucleo .nucleo__termino .nucleo__muestra {
+  align-self: center;
+  justify-self: start;
+  width: 1.3em;
+  height: 0.44em;
+  margin-left: 0.3em;
+}
+
+/* ---------- Dial ---------- */
+#nucleo .nucleo__instrumento {
+  width: min(100%, 420px);
+}
+
+#nucleo .nucleo__dial-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+#nucleo .nucleo__aro {
+  fill: none;
+  stroke: var(--borde);
+  stroke-width: 1;
+}
+
+#nucleo .nucleo__marcas {
+  fill: none;
+  stroke: var(--texto-3);
+  stroke-width: 8;
+}
+
+#nucleo .nucleo__marcas--largas {
+  stroke: var(--texto-2);
+  stroke-width: 18;
+}
+
+#nucleo .nucleo__arco path {
+  fill: none;
+  stroke-linecap: butt;
+}
+
+#nucleo .nucleo__arco--urgencia path {
+  stroke: var(--texto);
+  stroke-width: 18;
+}
+
+#nucleo .nucleo__arco--deficit path {
+  stroke: var(--texto-2);
+  stroke-width: 1.5;
+}
+
+#nucleo .nucleo__arco--cercania path {
+  stroke: var(--texto-2);
+  stroke-width: 6;
+}
+
+#nucleo .nucleo__arco--vencimiento path {
+  stroke: var(--texto-3);
+  stroke-width: 18;
+}
+
+#nucleo .nucleo__aguja line {
+  stroke: var(--texto);
+  stroke-width: 2;
+}
+
+#nucleo .nucleo__aguja path {
+  fill: var(--texto);
+}
+
+/* Las cifras llevan un halo del color del fondo para leerse aunque la aguja pase por debajo.
+   El tamaño va en unidades del viewBox: se ajusta por tramo de ancho para que en pantalla
+   nunca baje de 16 px (el dial más pequeño de escritorio mide unos 260 px). */
+#nucleo .nucleo__porcentaje {
+  font-family: var(--fuente-matriz);
+  font-size: 26px;
+  font-weight: 800;
+  fill: var(--texto-2);
+  stroke: var(--fondo);
+  stroke-width: 7px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+#nucleo .nucleo__eje circle {
+  fill: var(--fondo);
+  stroke: var(--texto-2);
+  stroke-width: 1.5;
+}
+
+#nucleo .nucleo__eje path {
+  fill: none;
+  stroke: var(--texto-3);
+  stroke-width: 1.5;
+}
+
+#nucleo .nucleo__lecturas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin-top: 1.25rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--borde);
+}
+
+#nucleo .nucleo__lecturas dt {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__lecturas dd {
+  margin-top: 0.35rem;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* ---------- Muelle de entrada ---------- */
+#nucleo .nucleo__muelle {
+  --visor-color: var(--texto-3);
+  position: relative;
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+#nucleo .nucleo__muelle-cuerpo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.55rem;
+}
+
+#nucleo .nucleo__lote-nombre {
+  font-size: var(--t-l);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 106;
+  line-height: 1.2;
+  letter-spacing: -0.008em;
+}
+
+#nucleo .nucleo__lote-detalle {
+  margin-top: 0.2rem;
+  font-size: var(--t-s);
+  color: var(--texto-2);
+}
+
+/* La ficha del lote: el símbolo de caja de los planos (cuadro con aspa) */
+#nucleo .nucleo__ficha {
+  position: relative;
+  z-index: 3;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--texto);
+  border-radius: 2px;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 0.6px), var(--texto) calc(50% - 0.6px) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+    linear-gradient(-45deg, transparent calc(50% - 0.6px), var(--texto) calc(50% - 0.6px) calc(50% + 0.6px), transparent calc(50% + 0.6px)),
+    var(--fondo);
+}
+
+/* ---------- Salida: puntaje por comuna ---------- */
+#nucleo .nucleo__filas {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+}
+
+#nucleo .nucleo__fila {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr) 4rem;
+  align-items: center;
+  column-gap: 0.85rem;
+  min-height: 2.85rem;
+  padding: 0.3rem 0.75rem 0.3rem 1.75rem;
+}
+
+#nucleo .nucleo__fila-puerto {
+  position: absolute;
+  left: 0.45rem;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border: 1px solid var(--texto-3);
+}
+
+#nucleo .nucleo__fila-marco {
+  --visor-color: var(--texto);
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+
+#nucleo .nucleo__fila-nombre {
+  font-size: var(--t-s);
+  font-weight: 460;
+  white-space: nowrap;
+}
+
+#nucleo .nucleo__fila-pista {
+  position: relative;
+  display: block;
+  height: 10px;
+  overflow: hidden;
+  background:
+    linear-gradient(to right, var(--borde-fuerte) 1px, transparent 1px) 0 0 / 25% 100% repeat-x,
+    var(--superficie);
+}
+
+#nucleo .nucleo__fila-barra {
+  position: absolute;
+  inset: 0;
+  background: var(--texto-2);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--valor, 0));
+}
+
+#nucleo .nucleo__fila-valor {
+  font-size: 1.125rem;
+  line-height: 1;
+  text-align: right;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__fila-distintivo {
+  position: absolute;
+  top: 0;
+  right: 0.75rem;
+  display: none;
+  padding: 0 0.45rem;
+  transform: translateY(-50%);
+  background: var(--fondo);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 88;
+  line-height: 1.4;
+  color: var(--texto);
+}
+
+#nucleo .nucleo__fila.es-mejor .nucleo__fila-marco,
+#nucleo .nucleo__fila.es-mejor .nucleo__fila-distintivo {
+  display: block;
+}
+
+#nucleo .nucleo__fila.es-mejor .nucleo__fila-barra {
+  background: var(--texto);
+}
+
+#nucleo .nucleo__fila.es-mejor .nucleo__fila-valor {
+  color: var(--texto);
+}
+
+#nucleo .nucleo__fila.es-mejor .nucleo__fila-puerto {
+  border-color: var(--texto);
+  background: var(--texto);
+}
+
+#nucleo .nucleo__recomendacion {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+#nucleo .nucleo__recomendacion-etiqueta {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__recomendacion-destino {
+  font-size: clamp(1.9rem, 1rem + 1.7vw, 2.9rem);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 114;
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+}
+
+/* ---------- Aviso de datos ficticios (rayado: zona fuera de la realidad medida) ---------- */
+#nucleo .nucleo__aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  max-width: 78ch;
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__aviso-marca {
+  flex: none;
+  width: 2.25rem;
+  height: 1.05rem;
+  margin-top: 0.05rem;
+  border: 1px solid var(--borde-fuerte);
+}
+
+/* ---------- Escritorio: la escena ocupa la pantalla y se ancla ---------- */
+@media (min-width: 900px) {
+  #nucleo .nucleo__escena {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    column-gap: var(--gutter);
+    row-gap: clamp(0.9rem, 2.6svh, 2rem);
+    height: 100svh;
+    min-height: 580px;
+    padding-block: clamp(4.25rem, 10svh, 6.5rem) clamp(1rem, 3svh, 2rem);
+  }
+
+  #nucleo .nucleo__trazas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  #nucleo .nucleo__pasos {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #nucleo .nucleo__formula {
+    grid-column: 1 / span 4;
+    grid-row: 2;
+    align-self: start;
+  }
+
+  #nucleo .nucleo__muelle {
+    grid-column: 1 / span 4;
+    grid-row: 3;
+    align-self: end;
+  }
+
+  #nucleo .nucleo__instrumento {
+    grid-column: 5 / span 4;
+    grid-row: 2 / 4;
+    align-self: center;
+    justify-self: center;
+    width: min(100%, 50svh);
+  }
+
+  #nucleo .nucleo__salida {
+    grid-column: 9 / span 4;
+    grid-row: 2 / 4;
+    align-self: center;
+  }
+
+  #nucleo .nucleo__escena > .nucleo__aviso {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+
+  #nucleo .nucleo__porcentaje {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 1100px) {
+  #nucleo .nucleo__porcentaje {
+    font-size: 28px;
+  }
+}
+
+/* ==========================================================================
+   PARTE 2 · Simulador «Prueba la regla»
+   ========================================================================== */
+#nucleo .nucleo__simulador {
+  margin-top: clamp(5rem, 3rem + 6vw, 9rem);
+  padding-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  border-top: 1px solid var(--borde);
+}
+
+#nucleo [data-requiere-js][hidden] {
+  display: none;
+}
+
+#nucleo .nucleo__sim-cabecera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem var(--gutter);
+}
+
+#nucleo .nucleo__sim-intro {
+  margin-top: 1rem;
+  max-width: 46ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#nucleo .nucleo__avisos {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+#nucleo .nucleo__nota {
+  max-width: 64ch;
+  font-size: var(--t-xs);
+  line-height: 1.55;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__nota .codigo {
+  font-size: 1rem;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__sim-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3.5rem var(--gutter);
+  margin-top: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+/* ---------- Mandos ---------- */
+#nucleo .nucleo__mandos {
+  display: grid;
+  gap: 2.5rem;
+  align-content: start;
+}
+
+#nucleo .nucleo__campo {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* float + width: única forma fiable de dar margen a un legend */
+#nucleo .nucleo__campo-titulo {
+  float: left;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0;
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__campo-titulo + * {
+  clear: both;
+}
+
+/* Control segmentado: tres radios nativos (las flechas del teclado funcionan solas) */
+#nucleo .nucleo__segmentado {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+}
+
+#nucleo .nucleo__opcion {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+#nucleo .nucleo__opcion + .nucleo__opcion {
+  border-top: 1px solid var(--borde-fuerte);
+}
+
+#nucleo .nucleo__opcion input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+#nucleo .nucleo__opcion input:focus-visible {
+  z-index: 1;
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+}
+
+#nucleo .nucleo__opcion-cuerpo {
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+  height: 100%;
+  min-height: 44px;
+  padding: 0.85rem 1rem 0.95rem;
+  transition:
+    background-color var(--dur-ui) var(--ease-suave),
+    color var(--dur-ui) var(--ease-suave);
+}
+
+#nucleo .nucleo__opcion-nombre {
+  font-size: var(--t-s);
+  font-weight: 540;
+  line-height: 1.3;
+}
+
+#nucleo .nucleo__opcion-detalle {
+  font-size: var(--t-xs);
+  line-height: 1.4;
+  color: var(--texto-2);
+  transition: color var(--dur-ui) var(--ease-suave);
+}
+
+#nucleo .nucleo__opcion input:checked + .nucleo__opcion-cuerpo {
+  background: var(--texto);
+  color: var(--fondo);
+}
+
+#nucleo .nucleo__opcion input:checked + .nucleo__opcion-cuerpo .nucleo__opcion-detalle {
+  color: var(--tinta-2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #nucleo .nucleo__opcion:hover input:not(:checked) + .nucleo__opcion-cuerpo {
+    background: var(--superficie-alta);
+  }
+}
+
+@media (min-width: 560px) {
+  #nucleo .nucleo__segmentado {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #nucleo .nucleo__opcion + .nucleo__opcion {
+    border-top: 0;
+    border-left: 1px solid var(--borde-fuerte);
+  }
+}
+
+/* Deslizadores de peso */
+#nucleo .nucleo__pesos {
+  display: grid;
+  gap: 1.75rem;
+}
+
+#nucleo .nucleo__mando-cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+
+#nucleo .nucleo__mando-nombre {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: var(--t-l);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+#nucleo .nucleo__efectivo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+#nucleo .nucleo__efectivo-texto {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__efectivo-cifra {
+  min-width: 2.9em;
+  font-size: 1.5rem;
+  line-height: 1;
+  text-align: right;
+}
+
+#nucleo .nucleo__ayuda {
+  margin-top: 0.3rem;
+  max-width: 52ch;
+  font-size: var(--t-s);
+  line-height: 1.5;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__regla-mando {
+  position: relative;
+  margin-top: 0.2rem;
+  padding-bottom: 0.7rem;
+}
+
+/* El recorrido útil del mango va de 9px a (100% − 9px): la pista rellena y la regla lo respetan */
+#nucleo .nucleo__rango {
+  --avance: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+#nucleo .nucleo__rango::-webkit-slider-runnable-track {
+  height: 2px;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(
+    to right,
+    var(--texto) 0 calc(9px + (100% - 18px) * var(--avance)),
+    var(--borde-fuerte) 0
+  );
+}
+
+#nucleo .nucleo__rango::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  border: 0;
+  border-radius: 0;
+  background: var(--texto);
+  box-shadow: 0 0 0 4px var(--fondo);
+  transition:
+    box-shadow var(--dur-micro) var(--ease-suave),
+    transform var(--dur-micro) var(--ease-suave);
+}
+
+#nucleo .nucleo__rango::-moz-range-track {
+  height: 2px;
+  border: 0;
+  border-radius: 0;
+  background: var(--borde-fuerte);
+}
+
+#nucleo .nucleo__rango::-moz-range-progress {
+  height: 2px;
+  background: var(--texto);
+}
+
+#nucleo .nucleo__rango::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 0;
+  background: var(--texto);
+  box-shadow: 0 0 0 4px var(--fondo);
+  transition:
+    box-shadow var(--dur-micro) var(--ease-suave),
+    transform var(--dur-micro) var(--ease-suave);
+}
+
+#nucleo .nucleo__rango:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+}
+
+#nucleo .nucleo__rango:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 3px var(--fondo),
+    0 0 0 5px var(--texto);
+}
+
+#nucleo .nucleo__rango:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 3px var(--fondo),
+    0 0 0 5px var(--texto);
+}
+
+#nucleo .nucleo__rango:active::-webkit-slider-thumb {
+  transform: scale(0.9);
+}
+
+#nucleo .nucleo__rango:active::-moz-range-thumb {
+  transform: scale(0.9);
+}
+
+/* Regla bajo la pista: una marca cada 10 y un triángulo en el valor del informe */
+#nucleo .nucleo__escala {
+  position: relative;
+  display: block;
+  height: 7px;
+  margin: -11px 9px 0;
+  border-right: 1px solid var(--borde-fuerte);
+  background: repeating-linear-gradient(to right, var(--borde-fuerte) 0 1px, transparent 1px 10%);
+  pointer-events: none;
+}
+
+#nucleo .nucleo__marca-informe {
+  position: absolute;
+  top: 10px;
+  left: calc(var(--informe, 0) * 100%);
+  width: 9px;
+  height: 6px;
+  transform: translateX(-50%);
+  background: var(--texto-2);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+#nucleo .nucleo__pista-mandos {
+  margin-top: 1.5rem;
+  max-width: 56ch;
+  font-size: var(--t-xs);
+  line-height: 1.55;
+  color: var(--texto-3);
+}
+
+/* Fórmula en vivo */
+#nucleo .nucleo__formula-viva {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.05rem 1.2rem 1.15rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+
+#nucleo .nucleo__formula-viva-titulo {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__formula-viva-texto {
+  font-size: var(--t-m);
+  line-height: 1.85;
+}
+
+#nucleo .nucleo__formula-viva-texto .codigo {
+  font-size: 1.0625rem;
+}
+
+#nucleo .nucleo__restablecer {
+  justify-self: start;
+}
+
+/* ---------- Resultados ---------- */
+#nucleo .nucleo__resultados {
+  min-width: 0;
+}
+
+#nucleo .nucleo__veredicto {
+  display: grid;
+  gap: 0.35rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+#nucleo .nucleo__veredicto-titulo {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__veredicto-destino {
+  font-size: clamp(2.1rem, 1.2rem + 2.4vw, 3.4rem);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 114;
+  line-height: 1.02;
+  letter-spacing: -0.024em;
+}
+
+#nucleo .nucleo__veredicto-detalle {
+  max-width: 52ch;
+  font-size: var(--t-s);
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__veredicto-detalle .codigo {
+  font-size: 1rem;
+  color: var(--texto);
+}
+
+#nucleo .nucleo__resultados-titulo {
+  margin-top: 2rem;
+  font-size: var(--t-m);
+  font-weight: 500;
+  font-variation-settings: 'wdth' 102;
+  line-height: 1.35;
+}
+
+#nucleo .nucleo__leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  margin-top: 1rem;
+  font-size: var(--t-xs);
+  font-weight: 500;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__leyenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+#nucleo .nucleo__leyenda .nucleo__muestra {
+  width: 1.4rem;
+  height: 0.85rem;
+}
+
+#nucleo .nucleo__escala-cabecera {
+  display: none;
+}
+
+#nucleo .nucleo__ranking {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+/* Puesto: el marco de visor y el distintivo solo los lleva el primero.
+   Al reordenar, Flip mueve las filas y el marco pasa con el nuevo primero. */
+#nucleo .nucleo__puesto {
+  --visor-color: transparent;
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-template-areas:
+    'posicion nombre puntaje'
+    'posicion barra barra';
+  align-items: center;
+  gap: 0.55rem var(--nucleo-hueco);
+  min-height: 3.6rem;
+  padding: 0.75rem 0.85rem;
+}
+
+#nucleo .nucleo__puesto:first-child {
+  --visor-color: var(--texto);
+}
+
+#nucleo .nucleo__posicion {
+  grid-area: posicion;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--texto-3);
+}
+
+#nucleo .nucleo__puesto-nombre {
+  grid-area: nombre;
+  font-size: var(--t-s);
+  font-weight: 480;
+  white-space: nowrap;
+}
+
+#nucleo .nucleo__distintivo {
+  position: absolute;
+  top: 0;
+  left: calc(0.85rem + 2rem + var(--nucleo-hueco) - 0.45rem);
+  display: none;
+  padding: 0 0.45rem;
+  transform: translateY(-50%);
+  background: var(--fondo);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 88;
+  line-height: 1.4;
+  color: var(--texto);
+}
+
+#nucleo .nucleo__puesto:first-child .nucleo__distintivo {
+  display: block;
+}
+
+#nucleo .nucleo__puesto:first-child .nucleo__posicion,
+#nucleo .nucleo__puesto:first-child .nucleo__puesto-puntaje {
+  color: var(--texto);
+}
+
+/* Con todos los pesos en cero no hay recomendación: se apaga el marco */
+#nucleo .nucleo__ranking--sin-pesos .nucleo__puesto:first-child {
+  --visor-color: transparent;
+}
+
+#nucleo .nucleo__ranking--sin-pesos .nucleo__distintivo {
+  display: none;
+}
+
+/* Barra apilada: cada tramo ocupa [desplazamiento, desplazamiento + aporte] de la escala 0–1 */
+#nucleo .nucleo__apilada {
+  position: relative;
+  grid-area: barra;
+  display: block;
+  height: 14px;
+  overflow: hidden;
+  background:
+    linear-gradient(to right, var(--borde) 1px, transparent 1px) 0 0 / 25% 100% repeat-x,
+    var(--superficie);
+  border-right: 1px solid var(--borde);
+}
+
+#nucleo .nucleo__segmento {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  transform: translateX(calc(var(--o, 0) * 100%)) scaleX(var(--a, 0));
+}
+
+#nucleo .nucleo__puesto-puntaje {
+  grid-area: puntaje;
+  font-size: 1.125rem;
+  line-height: 1;
+  text-align: right;
+  color: var(--texto-2);
+}
+
+@media (min-width: 600px) {
+  #nucleo .nucleo__puesto {
+    grid-template-columns: var(--nucleo-columnas);
+    grid-template-areas: 'posicion nombre barra puntaje';
+  }
+
+  #nucleo .nucleo__escala-cabecera {
+    display: grid;
+    grid-template-columns: var(--nucleo-columnas);
+    column-gap: var(--nucleo-hueco);
+    margin-top: 1.5rem;
+    padding-inline: 0.85rem;
+  }
+
+  #nucleo .nucleo__escala-pista {
+    position: relative;
+    grid-column: 3;
+    display: block;
+    height: 1.1rem;
+    color: var(--texto-3);
+  }
+
+  #nucleo .nucleo__escala-pista .codigo {
+    position: absolute;
+    top: 0;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  #nucleo .nucleo__escala-pista .codigo:nth-child(1) {
+    left: 0;
+  }
+
+  #nucleo .nucleo__escala-pista .codigo:nth-child(2) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #nucleo .nucleo__escala-pista .codigo:nth-child(3) {
+    right: 0;
+  }
+}
+
+/* ---------- Datos de entrada ---------- */
+#nucleo .nucleo__datos {
+  margin-top: 2.25rem;
+  border-top: 1px solid var(--borde);
+}
+
+#nucleo .nucleo__datos-resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 48px;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--t-s);
+  font-weight: 540;
+}
+
+#nucleo .nucleo__datos-resumen::-webkit-details-marker {
+  display: none;
+}
+
+/* Signo más que se vuelve menos al abrir */
+#nucleo .nucleo__datos-resumen::after {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 12px no-repeat;
+  transition: transform var(--dur-ui) var(--ease-suave);
+}
+
+#nucleo .nucleo__datos[open] .nucleo__datos-resumen::after {
+  background: linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat;
+}
+
+#nucleo .nucleo__tabla-marco {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+#nucleo .nucleo__tabla-marco:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 2px;
+}
+
+#nucleo .nucleo__tabla {
+  min-width: 36rem;
+}
+
+#nucleo .nucleo__tabla caption {
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+#nucleo .nucleo__tabla tbody th {
+  font-weight: 480;
+  white-space: nowrap;
+}
+
+#nucleo .nucleo__tabla td {
+  font-family: var(--fuente-matriz);
+  font-size: 1rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--texto-2);
+}
+
+#nucleo .nucleo__tabla thead th:not(:first-child) {
+  text-align: right;
+}
+
+#nucleo .nucleo__tabla td[data-dato='puntaje'] {
+  color: var(--texto);
+}
+
+/* ---------- Simulador en escritorio: mandos a la izquierda, resultado a la derecha ---------- */
+@media (min-width: 900px) {
+  #nucleo .nucleo__sim-cabecera {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  #nucleo .nucleo__sim-presentacion {
+    grid-column: 1 / span 5;
+  }
+
+  #nucleo .nucleo__avisos {
+    grid-column: 7 / span 6;
+    padding-top: 0.4rem;
+  }
+
+  #nucleo .nucleo__sim-cuerpo {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  #nucleo .nucleo__mandos {
+    grid-column: 1 / span 6;
+  }
+
+  #nucleo .nucleo__resultados {
+    grid-column: 7 / span 6;
+  }
+
+  /* Sin JavaScript no hay mandos: el resultado ocupa su lugar */
+  #nucleo .nucleo__mandos[hidden] + .nucleo__resultados {
+    grid-column: 1 / span 8;
+  }
+}
+
+@media (min-width: 1200px) {
+  #nucleo .nucleo__mandos {
+    grid-column: 1 / span 5;
+  }
+}

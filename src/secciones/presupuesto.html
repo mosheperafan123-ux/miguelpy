@@ -1,0 +1,259 @@
+<section id="presupuesto" class="seccion seccion--clara" data-capitulo="2.4" data-titulo-corto="Presupuesto" aria-labelledby="presupuesto-titulo">
+  <div class="contenedor">
+    <header class="cabecera-seccion">
+      <p class="ref-capitulo">2.4<span>Perfil del proyecto</span></p>
+      <div>
+        <h2 class="titulo-seccion" id="presupuesto-titulo" data-extender>Presupuesto estimado</h2>
+        <p class="entradilla">
+          El prototipo se construye con herramientas gratuitas. El gasto en efectivo cubre transporte, materiales,
+          conectividad e imprevistos; el resto lo pone el equipo en horas de trabajo.
+        </p>
+      </div>
+    </header>
+
+    <!-- Total protagonista: la lectura de un contador -->
+    <div class="presupuesto__total-fila">
+      <div class="presupuesto__total">
+        <p class="presupuesto__cifra">
+          <span class="solo-lector">COP 308.000</span>
+          <span class="presupuesto__moneda" aria-hidden="true">COP</span>
+          <span class="presupuesto__valor" aria-hidden="true" data-total>308.000</span>
+        </p>
+        <p class="presupuesto__total-texto">en efectivo, más el aporte en horas del equipo</p>
+      </div>
+    </div>
+
+    <!-- Plano acotado: cada tramo de la barra mide lo que pesa su rubro sobre el total.
+         --valor lo vuelve a fijar presupuesto.js desde proyecto.js -->
+    <figure class="presupuesto__plano">
+      <div class="presupuesto__dibujo" aria-hidden="true">
+        <div class="cota presupuesto__cota-total"><span class="cota__texto">Total en efectivo: COP 308.000</span></div>
+        <div class="presupuesto__piezas">
+          <div class="presupuesto__cero" data-rubro="Software">
+            <span class="presupuesto__cero-linea"></span>
+            <span class="presupuesto__cero-via"></span>
+            <span class="presupuesto__cero-texto">Software: 0, herramientas gratuitas</span>
+          </div>
+          <div class="presupuesto__pieza" data-rubro="Transporte y visitas" style="--valor: 120000">
+            <div class="cota presupuesto__cota"><span class="cota__texto">COP 120.000</span></div>
+            <div class="presupuesto__segmento presupuesto__segmento--lleno"></div>
+            <p class="presupuesto__rubro">Transporte y visitas</p>
+          </div>
+          <div class="presupuesto__pieza" data-rubro="Materiales e impresión" style="--valor: 60000">
+            <div class="cota presupuesto__cota"><span class="cota__texto">COP 60.000</span></div>
+            <div class="presupuesto__segmento presupuesto__segmento--rayado"></div>
+            <p class="presupuesto__rubro">Materiales e impresión</p>
+          </div>
+          <div class="presupuesto__pieza" data-rubro="Conectividad" style="--valor: 100000">
+            <div class="cota presupuesto__cota"><span class="cota__texto">COP 100.000</span></div>
+            <div class="presupuesto__segmento presupuesto__segmento--puntos"></div>
+            <p class="presupuesto__rubro">Conectividad</p>
+          </div>
+          <div class="presupuesto__pieza" data-rubro="Imprevistos (10 %)" style="--valor: 28000">
+            <div class="cota presupuesto__cota"><span class="cota__texto">COP 28.000</span></div>
+            <div class="presupuesto__segmento presupuesto__segmento--reserva"></div>
+            <p class="presupuesto__rubro">Imprevistos (10&nbsp;%)</p>
+          </div>
+        </div>
+      </div>
+      <figcaption class="presupuesto__pie-plano">
+        Gasto en efectivo dibujado a escala: cada tramo es proporcional a su valor. El detalle exacto está en la tabla.
+      </figcaption>
+    </figure>
+
+    <div class="presupuesto__detalle">
+      <div class="presupuesto__detalle-interior">
+        <!-- Tabla: la referencia exacta, idéntica a la del informe -->
+        <div class="presupuesto__tabla-bloque">
+          <div class="presupuesto__tabla-marco" role="region" aria-labelledby="presupuesto-tabla-titulo" tabindex="0">
+            <table class="tabla presupuesto__tabla">
+              <caption id="presupuesto-tabla-titulo">Desglose del presupuesto estimado</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Rubro</th>
+                  <th scope="col">Detalle</th>
+                  <th scope="col" class="presupuesto__col-valor">Valor (COP)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Software</th>
+                  <td>Excel, Google Sheets y Google Forms (herramientas gratuitas)</td>
+                  <td class="presupuesto__col-valor">0</td>
+                </tr>
+                <tr>
+                  <th scope="row">Transporte y visitas</th>
+                  <td>Desplazamientos para reunirse con fundaciones y líderes</td>
+                  <td class="presupuesto__col-valor">120.000</td>
+                </tr>
+                <tr>
+                  <th scope="row">Materiales e impresión</th>
+                  <td>Encuestas, manual de uso y presentación</td>
+                  <td class="presupuesto__col-valor">60.000</td>
+                </tr>
+                <tr>
+                  <th scope="row">Conectividad</th>
+                  <td>Datos móviles para comunicación y trabajo de campo</td>
+                  <td class="presupuesto__col-valor">100.000</td>
+                </tr>
+                <tr>
+                  <th scope="row">Imprevistos (10&nbsp;%)</th>
+                  <td>Reserva sobre los rubros anteriores</td>
+                  <td class="presupuesto__col-valor">28.000</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="presupuesto__fila-total">
+                  <th scope="row">Total en efectivo</th>
+                  <td></td>
+                  <td class="presupuesto__col-valor">308.000</td>
+                </tr>
+                <tr class="presupuesto__fila-especie">
+                  <th scope="row">Aporte en especie</th>
+                  <td>4 integrantes × 16 semanas × 6 h/semana ≈ 384 horas de trabajo</td>
+                  <td class="presupuesto__col-valor">
+                    <span aria-hidden="true">—</span><span class="solo-lector">Sin valor en efectivo</span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <p class="nota-fuente">Valores estimados por el equipo, sujetos a ajuste. Fuente: elaboración propia.</p>
+        </div>
+
+        <!-- Aporte en especie: panel de LED, un punto por cada hora de trabajo -->
+        <figure class="presupuesto__especie placa visor">
+          <div class="presupuesto__especie-cabecera">
+            <div>
+              <h3 class="presupuesto__especie-titulo">Aporte en especie</h3>
+              <p class="presupuesto__especie-leyenda">Cada punto es una hora; cada columna, una semana.</p>
+            </div>
+            <p class="presupuesto__horas">
+              <span class="solo-lector">384 horas</span>
+              <span class="presupuesto__horas-cifra" aria-hidden="true" data-horas>384 h</span>
+            </p>
+          </div>
+          <div class="presupuesto__matriz">
+            <div class="presupuesto__semanas" aria-hidden="true">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+              <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
+            </div>
+            <div class="presupuesto__personas" aria-hidden="true">
+              <span>SL</span><span>MN</span><span>SN</span><span>JL</span>
+            </div>
+            <svg class="presupuesto__puntos" viewBox="0 0 448 160" role="img" aria-labelledby="presupuesto-matriz-titulo" focusable="false">
+              <title id="presupuesto-matriz-titulo">Matriz de 384 horas: 4 integrantes durante 16 semanas, 6 horas por semana cada uno</title>
+              <defs>
+                <g id="presupuesto-celda" fill="currentColor">
+                  <circle cx="9" cy="10" r="3.6" />
+                  <circle cx="19" cy="10" r="3.6" />
+                  <circle cx="9" cy="20" r="3.6" />
+                  <circle cx="19" cy="20" r="3.6" />
+                  <circle cx="9" cy="30" r="3.6" />
+                  <circle cx="19" cy="30" r="3.6" />
+                </g>
+              </defs>
+              <g data-semana="1">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="0" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="0" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="0" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="0" y="120" />
+              </g>
+              <g data-semana="2">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="28" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="28" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="28" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="28" y="120" />
+              </g>
+              <g data-semana="3">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="56" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="56" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="56" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="56" y="120" />
+              </g>
+              <g data-semana="4">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="84" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="84" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="84" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="84" y="120" />
+              </g>
+              <g data-semana="5">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="112" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="112" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="112" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="112" y="120" />
+              </g>
+              <g data-semana="6">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="140" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="140" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="140" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="140" y="120" />
+              </g>
+              <g data-semana="7">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="168" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="168" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="168" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="168" y="120" />
+              </g>
+              <g data-semana="8">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="196" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="196" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="196" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="196" y="120" />
+              </g>
+              <g data-semana="9">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="224" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="224" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="224" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="224" y="120" />
+              </g>
+              <g data-semana="10">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="252" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="252" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="252" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="252" y="120" />
+              </g>
+              <g data-semana="11">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="280" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="280" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="280" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="280" y="120" />
+              </g>
+              <g data-semana="12">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="308" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="308" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="308" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="308" y="120" />
+              </g>
+              <g data-semana="13">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="336" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="336" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="336" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="336" y="120" />
+              </g>
+              <g data-semana="14">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="364" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="364" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="364" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="364" y="120" />
+              </g>
+              <g data-semana="15">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="392" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="392" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="392" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="392" y="120" />
+              </g>
+              <g data-semana="16">
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="420" y="0" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="420" y="40" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="420" y="80" />
+                <use class="presupuesto__celda" href="#presupuesto-celda" x="420" y="120" />
+              </g>
+            </svg>
+          </div>
+          <figcaption class="presupuesto__especie-pie">4 integrantes × 16 semanas × 6 h/semana ≈ 384 horas de trabajo</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>

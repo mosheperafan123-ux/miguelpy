@@ -1,0 +1,84 @@
+/* ==========================================================================
+   1.4 Pregunta reto · texto monumental en un visor
+   La pregunta se enmarca con esquinas de visor, como el campo de lectura de
+   una máquina; pregunta.js la «lee» palabra a palabra al bajar.
+   ========================================================================== */
+
+#pregunta .pregunta__lectura {
+  --pregunta-holgura: clamp(1.25rem, 0.6rem + 2.8vw, 3.5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+#pregunta .pregunta__visor {
+  --visor-color: var(--borde-fuerte);
+  --visor-largo: 22px;
+  padding: var(--pregunta-holgura);
+}
+
+#pregunta .pregunta__texto {
+  max-width: 22ch;
+  font-size: clamp(2rem, 1rem + 3.6vw, 4.25rem);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 108;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  color: var(--texto);
+  text-wrap: pretty;
+}
+
+/* Regla de avance de la lectura: sin JavaScript se ve completa */
+#pregunta .pregunta__regla {
+  position: relative;
+  height: 1px;
+  margin-top: clamp(1.75rem, 1rem + 2vw, 2.75rem);
+  background: var(--borde);
+}
+
+#pregunta .pregunta__regla::before,
+#pregunta .pregunta__regla::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  width: 1px;
+  height: 9px;
+  background: var(--borde-fuerte);
+}
+
+#pregunta .pregunta__regla::before {
+  left: 0;
+}
+
+#pregunta .pregunta__regla::after {
+  right: 0;
+}
+
+#pregunta .pregunta__avance {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0.5px;
+  height: 2px;
+  background: var(--texto);
+  transform-origin: 0 50%;
+}
+
+/* ---------- Escritorio ---------- */
+@media (min-width: 900px) {
+  /* Misma retícula que .cabecera-seccion: el texto arranca alineado con el titular
+     y las esquinas del visor sobresalen hacia la columna de la referencia. */
+  #pregunta .pregunta__lectura {
+    grid-template-columns: minmax(7rem, 2fr) minmax(0, 10fr);
+    gap: var(--gutter);
+  }
+
+  #pregunta .pregunta__visor {
+    grid-column: 2;
+    margin-left: calc(-1 * var(--pregunta-holgura));
+  }
+
+  /* Mientras está anclada, la pregunta tiene que caber entera en una pantalla baja */
+  #pregunta .pregunta__texto {
+    font-size: min(clamp(2rem, 1rem + 3.6vw, 4.25rem), 1rem + 5.4svh);
+  }
+}

@@ -1,0 +1,374 @@
+/* ==========================================================================
+   Marco fijo: precarga, barra superior, índice, riel de progreso y pie.
+   ========================================================================== */
+
+/* Línea de un titular que se extiende (ver extenderTitulo en utilidades.js) */
+.linea-extensible {
+  white-space: nowrap;
+}
+
+/* ---------- Precarga ---------- */
+.precarga {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+}
+
+.con-js .precarga {
+  display: grid;
+}
+
+html.bloqueado,
+html.bloqueado body {
+  overflow: hidden;
+}
+
+.precarga__obturador {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50.5%;
+  background: var(--negro);
+}
+
+.precarga__obturador--arriba {
+  top: 0;
+  border-bottom: 1px solid var(--acero);
+}
+
+.precarga__obturador--abajo {
+  bottom: 0;
+  border-top: 1px solid var(--acero);
+}
+
+.precarga__nucleo {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1.75rem;
+}
+
+.precarga__marca {
+  width: clamp(88px, 12vw, 132px);
+  overflow: visible;
+}
+
+.precarga__estado {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+}
+
+.precarga__cifra {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.precarga__texto {
+  font-size: var(--t-xs);
+  font-weight: 500;
+  font-variation-settings: 'wdth' 90;
+  color: var(--aluminio);
+  min-width: 16ch;
+  text-align: center;
+}
+
+.con-js .precarga[data-terminada] {
+  display: none;
+}
+
+/* ---------- Barra superior ---------- */
+.barra {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 160;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem var(--margen);
+  color: var(--blanco);
+  mix-blend-mode: difference; /* se invierte sola sobre las placas claras */
+  pointer-events: none;
+}
+
+.barra > * {
+  pointer-events: auto;
+}
+
+.barra__marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  font-size: var(--t-s);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 104;
+  letter-spacing: -0.005em;
+}
+
+.barra__simbolo {
+  width: 30px;
+  height: 30px;
+}
+
+.barra__nombre-resto {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .barra__nombre-resto {
+    display: inline;
+  }
+}
+
+.barra__acciones {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 2rem);
+}
+
+.barra__enlace {
+  display: none;
+  font-size: var(--t-s);
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size var(--dur-ui) var(--ease-salida);
+}
+
+@media (min-width: 720px) {
+  .barra__enlace {
+    display: inline;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .barra__enlace:hover {
+    background-size: 100% 1px;
+  }
+}
+
+.barra__menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: var(--t-s);
+  font-weight: 560;
+}
+
+.barra__menu-icono {
+  display: grid;
+  gap: 5px;
+  width: 22px;
+}
+
+.barra__menu-icono span {
+  display: block;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform var(--dur-ui) var(--ease-mov);
+}
+
+.barra__menu[aria-expanded='true'] .barra__menu-icono span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.barra__menu[aria-expanded='true'] .barra__menu-icono span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* ---------- Índice a pantalla completa ---------- */
+.indice {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  overflow-y: auto;
+  background: var(--negro);
+  color: var(--blanco);
+  overscroll-behavior: contain;
+}
+
+.indice[hidden] {
+  display: none;
+}
+
+.indice__interior {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem var(--gutter);
+  padding-block: 7rem 4rem;
+}
+
+@media (min-width: 900px) {
+  .indice__interior {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-content: center;
+    min-height: 100svh;
+  }
+}
+
+.indice__capitulo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--acero);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 88;
+  color: var(--titanio);
+}
+
+.indice ul {
+  display: grid;
+}
+
+.indice a {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block: 0.6rem;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.indice a .codigo {
+  font-size: 0.95rem;
+  color: var(--titanio);
+}
+
+.indice__texto {
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.6rem);
+  font-weight: 340;
+  font-variation-settings: 'wdth' 108;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  transition: font-variation-settings var(--dur-media) var(--ease-salida);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .indice a:hover .indice__texto {
+    font-variation-settings: 'wdth' 125;
+  }
+}
+
+/* ---------- Riel de progreso ---------- */
+.riel {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .riel {
+    position: fixed;
+    right: 12px;
+    top: 50%;
+    z-index: 140;
+    display: block;
+    width: 14px;
+    height: 42vh;
+    transform: translateY(-50%);
+    color: var(--blanco);
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+}
+
+.riel__regla {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(to bottom, currentColor 0 1px, transparent 1px 100%) right top / 6px calc(42vh / 40),
+    repeating-linear-gradient(to bottom, currentColor 0 1px, transparent 1px 100%) right top / 14px calc(42vh / 8);
+  background-repeat: repeat-y;
+  opacity: 0.55;
+}
+
+.riel__cursor {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.riel__cursor::after {
+  content: '';
+  order: 3;
+  width: 14px;
+  height: 2px;
+  background: currentColor;
+  margin-right: -4px;
+}
+
+.riel__codigo {
+  font-size: 0.95rem;
+}
+
+/* El nombre del capítulo se montaba sobre la columna derecha del contenido:
+   el riel solo muestra el código (el nombre queda en el DOM para el estado interno). */
+.riel__nombre {
+  display: none;
+}
+
+/* ---------- Pie ---------- */
+.pie {
+  position: relative;
+  padding-block: clamp(5rem, 4rem + 6vw, 10rem) 2.5rem;
+  border-top: 1px solid var(--acero);
+  background: var(--negro);
+  color: var(--blanco);
+}
+
+.pie__lema {
+  font-size: var(--t-display);
+  font-weight: 250;
+  font-variation-settings: 'wdth' 118;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+
+.pie__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: clamp(4rem, 3rem + 4vw, 7rem);
+  padding-top: 2rem;
+  border-top: 1px solid var(--acero);
+  font-size: var(--t-xs);
+  color: var(--titanio);
+}
+
+.pie__simbolo {
+  width: 28px;
+  height: 28px;
+  color: var(--blanco);
+}
+
+.pie__arriba {
+  margin-left: auto;
+  color: var(--blanco);
+  font-size: var(--t-s);
+  font-weight: 500;
+}

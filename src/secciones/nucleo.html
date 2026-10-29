@@ -1,0 +1,501 @@
+<section id="nucleo" class="seccion" data-capitulo="2.3" data-titulo-corto="El algoritmo de cruce" aria-labelledby="nucleo-titulo">
+  <div class="contenedor">
+    <header class="cabecera-seccion">
+      <p class="ref-capitulo">2.3<span>Funcionamiento del núcleo</span></p>
+      <div>
+        <h2 class="titulo-seccion" id="nucleo-titulo" data-extender>Así decide a dónde va cada lote</h2>
+        <p class="entradilla">
+          Cada donación y cada necesidad reciben un puntaje según urgencia, cercanía, déficit y fecha de vencimiento.
+          El sistema empareja los puntajes más compatibles y sugiere a qué sector enviar cada lote. La versión inicial
+          usará reglas simples en hojas de cálculo, sin inteligencia artificial compleja.
+        </p>
+      </div>
+    </header>
+
+    <!-- PARTE 1 · La máquina. En escritorio se ancla y avanza con el scroll (nucleo.js).
+         Sin JavaScript se ve en su estado final: fórmula, dial completo y resultado del lote. -->
+    <figure class="nucleo__escena">
+      <h3 class="solo-lector">La regla aplicada a un lote de prueba</h3>
+
+      <!-- Trazas de circuito entre el muelle, el dial y la comuna elegida: las dibuja nucleo.js -->
+      <svg class="nucleo__trazas" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+
+      <ol class="nucleo__pasos" role="list" aria-label="Pasos de la regla">
+        <li class="nucleo__paso">
+          <span class="nucleo__paso-numero codigo">1</span>
+          <span class="nucleo__paso-texto">Calibrar los pesos</span>
+          <span class="nucleo__paso-avance" aria-hidden="true"><span></span></span>
+        </li>
+        <li class="nucleo__paso">
+          <span class="nucleo__paso-numero codigo">2</span>
+          <span class="nucleo__paso-texto">Recibir el lote</span>
+          <span class="nucleo__paso-avance" aria-hidden="true"><span></span></span>
+        </li>
+        <li class="nucleo__paso">
+          <span class="nucleo__paso-numero codigo">3</span>
+          <span class="nucleo__paso-texto">Puntuar cada comuna</span>
+          <span class="nucleo__paso-avance" aria-hidden="true"><span></span></span>
+        </li>
+        <li class="nucleo__paso">
+          <span class="nucleo__paso-numero codigo">4</span>
+          <span class="nucleo__paso-texto">Recomendar el destino</span>
+          <span class="nucleo__paso-avance" aria-hidden="true"><span></span></span>
+        </li>
+      </ol>
+
+      <!-- La fórmula, armada como un libro de cuentas: cada término lleva la muestra de su arco -->
+      <div class="nucleo__formula">
+        <p class="solo-lector">
+          Puntaje igual a 0,35 por urgencia, más 0,30 por déficit, más 0,20 por cercanía y más 0,15 por vencimiento.
+        </p>
+        <div class="nucleo__ecuacion" aria-hidden="true">
+          <p class="nucleo__sujeto">Puntaje<span class="nucleo__igual">=</span></p>
+          <p class="nucleo__termino" data-variable="urgencia">
+            <span class="nucleo__operador"></span>
+            <span class="nucleo__coef codigo">0,35</span>
+            <span class="nucleo__por">·</span>
+            <span class="nucleo__variable">Urgencia</span>
+            <span class="nucleo__muestra nucleo__muestra--urgencia"></span>
+          </p>
+          <p class="nucleo__termino" data-variable="deficit">
+            <span class="nucleo__operador">+</span>
+            <span class="nucleo__coef codigo">0,30</span>
+            <span class="nucleo__por">·</span>
+            <span class="nucleo__variable">Déficit</span>
+            <span class="nucleo__muestra nucleo__muestra--deficit"></span>
+          </p>
+          <p class="nucleo__termino" data-variable="cercania">
+            <span class="nucleo__operador">+</span>
+            <span class="nucleo__coef codigo">0,20</span>
+            <span class="nucleo__por">·</span>
+            <span class="nucleo__variable">Cercanía</span>
+            <span class="nucleo__muestra nucleo__muestra--cercania"></span>
+          </p>
+          <p class="nucleo__termino" data-variable="vencimiento">
+            <span class="nucleo__operador">+</span>
+            <span class="nucleo__coef codigo">0,15</span>
+            <span class="nucleo__por">·</span>
+            <span class="nucleo__variable">Vencimiento</span>
+            <span class="nucleo__muestra nucleo__muestra--vencimiento"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Dial de calibración: los pesos reparten la vuelta y la aguja lee el puntaje más alto -->
+      <div class="nucleo__instrumento">
+        <div class="nucleo__dial">
+          <svg class="nucleo__dial-svg" viewBox="0 0 480 480" role="img" aria-labelledby="nucleo-dial-titulo" aria-describedby="nucleo-dial-desc">
+            <title id="nucleo-dial-titulo">Dial de calibración de la regla de puntaje</title>
+            <desc id="nucleo-dial-desc">
+              Los cuatro pesos reparten la vuelta completa: urgencia 35 %, déficit 30 %, cercanía 20 % y vencimiento 15 %.
+              La aguja marca el puntaje más alto del lote alimentos perecederos: 0,738 sobre 1.
+            </desc>
+
+            <!-- Regla graduada: 100 marcas, una más larga cada 10 (trazo discontinuo sobre un círculo) -->
+            <g class="nucleo__regla">
+              <circle class="nucleo__aro" cx="240" cy="240" r="192" />
+              <circle class="nucleo__aro" cx="240" cy="240" r="146" />
+              <circle class="nucleo__marcas" cx="240" cy="240" r="212" transform="rotate(-90 240 240)"
+                stroke-dasharray="1.2 12.120353" stroke-dashoffset="0.6" />
+              <circle class="nucleo__marcas nucleo__marcas--largas" cx="240" cy="240" r="212" transform="rotate(-90 240 240)"
+                stroke-dasharray="1.6 131.603529" stroke-dashoffset="0.8" />
+            </g>
+
+            <!-- Arcos proporcionales a los pesos; cada uno con su trazo, sin depender del color -->
+            <g class="nucleo__arco nucleo__arco--urgencia" data-variable="urgencia">
+              <path data-radio="168" d="M246.33 72.12A168 168 0 0 1 379.54 333.56" />
+            </g>
+            <g class="nucleo__arco nucleo__arco--deficit" data-variable="deficit">
+              <path data-radio="160" d="M365.81 338.86A160 160 0 0 1 114.19 338.86" />
+              <path data-radio="164" d="M368.95 341.33A164 164 0 0 1 111.05 341.33" />
+              <path data-radio="168" d="M372.1 343.8A168 168 0 0 1 107.9 343.8" />
+              <path data-radio="172" d="M375.24 346.27A172 172 0 0 1 104.76 346.27" />
+              <path data-radio="176" d="M378.39 348.74A176 176 0 0 1 101.61 348.74" />
+            </g>
+            <g class="nucleo__arco nucleo__arco--cercania" data-variable="cercania">
+              <path data-radio="168" d="M100.46 333.56A168 168 0 0 1 100.46 146.44" />
+            </g>
+            <g class="nucleo__arco nucleo__arco--vencimiento" data-variable="vencimiento">
+              <path data-radio="168" d="M107.9 136.2A168 168 0 0 1 233.67 72.12" />
+            </g>
+
+            <!-- Aguja: el grupo exterior fija la lectura final; nucleo.js gira solo el interior -->
+            <g class="nucleo__aguja-base" transform="rotate(265.5 240 240)">
+              <g class="nucleo__aguja">
+                <line x1="240" y1="203" x2="240" y2="46" />
+                <path d="M240 33 245.5 47H234.5Z" />
+              </g>
+            </g>
+
+            <g class="nucleo__porcentajes">
+              <text class="nucleo__porcentaje" data-variable="urgencia" x="339.79" y="189.15" text-anchor="middle" dominant-baseline="central">35&#160;%</text>
+              <text class="nucleo__porcentaje" data-variable="deficit" x="240" y="352" text-anchor="middle" dominant-baseline="central">30&#160;%</text>
+              <text class="nucleo__porcentaje" data-variable="cercania" x="128" y="240" text-anchor="middle" dominant-baseline="central">20&#160;%</text>
+              <text class="nucleo__porcentaje" data-variable="vencimiento" x="189.15" y="140.21" text-anchor="middle" dominant-baseline="central">15&#160;%</text>
+            </g>
+
+            <g class="nucleo__eje">
+              <circle cx="240" cy="240" r="34" />
+              <path d="M240 212v10M240 258v10M212 240h10M258 240h10" />
+            </g>
+          </svg>
+        </div>
+        <dl class="nucleo__lecturas">
+          <div>
+            <dt>Suma de pesos</dt>
+            <dd class="codigo nucleo__suma">1,00</dd>
+          </div>
+          <div>
+            <dt>Puntaje más alto</dt>
+            <dd class="codigo nucleo__mas-alto">0,738</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Muelle de entrada: el lote espera aquí antes de entrar al dial -->
+      <div class="nucleo__muelle visor">
+        <p class="etiqueta">Lote entrante</p>
+        <div class="nucleo__muelle-cuerpo">
+          <div>
+            <p class="nucleo__lote-nombre">Alimentos perecederos</p>
+            <p class="nucleo__lote-detalle">Vencen en 4 días</p>
+          </div>
+          <span class="nucleo__ficha" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- Salida: el puntaje del lote en cada comuna (orden de la lista de comunas, no del ranking) -->
+      <div class="nucleo__salida">
+        <p class="etiqueta" id="nucleo-salida-titulo">Puntaje del lote en cada comuna</p>
+        <ul class="nucleo__filas" role="list" aria-labelledby="nucleo-salida-titulo">
+          <li class="nucleo__fila" data-comuna="c13">
+            <span class="nucleo__fila-puerto" aria-hidden="true"></span>
+            <span class="nucleo__fila-marco visor" aria-hidden="true"></span>
+            <span class="nucleo__fila-nombre">Comuna 13</span>
+            <span class="nucleo__fila-pista" aria-hidden="true"><span class="nucleo__fila-barra" style="--valor: 0.66"></span></span>
+            <span class="nucleo__fila-valor codigo"><span class="solo-lector">puntaje </span><span class="nucleo__fila-cifra">0,660</span></span>
+            <span class="nucleo__fila-distintivo">Mejor puntaje</span>
+          </li>
+          <li class="nucleo__fila" data-comuna="c15">
+            <span class="nucleo__fila-puerto" aria-hidden="true"></span>
+            <span class="nucleo__fila-marco visor" aria-hidden="true"></span>
+            <span class="nucleo__fila-nombre">Comuna 15</span>
+            <span class="nucleo__fila-pista" aria-hidden="true"><span class="nucleo__fila-barra" style="--valor: 0.6875"></span></span>
+            <span class="nucleo__fila-valor codigo"><span class="solo-lector">puntaje </span><span class="nucleo__fila-cifra">0,688</span></span>
+            <span class="nucleo__fila-distintivo">Mejor puntaje</span>
+          </li>
+          <li class="nucleo__fila" data-comuna="c18">
+            <span class="nucleo__fila-puerto" aria-hidden="true"></span>
+            <span class="nucleo__fila-marco visor" aria-hidden="true"></span>
+            <span class="nucleo__fila-nombre">Comuna 18</span>
+            <span class="nucleo__fila-pista" aria-hidden="true"><span class="nucleo__fila-barra" style="--valor: 0.7275"></span></span>
+            <span class="nucleo__fila-valor codigo"><span class="solo-lector">puntaje </span><span class="nucleo__fila-cifra">0,728</span></span>
+            <span class="nucleo__fila-distintivo">Mejor puntaje</span>
+          </li>
+          <li class="nucleo__fila es-mejor" data-comuna="c20">
+            <span class="nucleo__fila-puerto" aria-hidden="true"></span>
+            <span class="nucleo__fila-marco visor" aria-hidden="true"></span>
+            <span class="nucleo__fila-nombre">Comuna 20</span>
+            <span class="nucleo__fila-pista" aria-hidden="true"><span class="nucleo__fila-barra" style="--valor: 0.7375"></span></span>
+            <span class="nucleo__fila-valor codigo"><span class="solo-lector">puntaje </span><span class="nucleo__fila-cifra">0,738</span></span>
+            <span class="nucleo__fila-distintivo">Mejor puntaje</span>
+          </li>
+          <li class="nucleo__fila" data-comuna="c21">
+            <span class="nucleo__fila-puerto" aria-hidden="true"></span>
+            <span class="nucleo__fila-marco visor" aria-hidden="true"></span>
+            <span class="nucleo__fila-nombre">Comuna 21</span>
+            <span class="nucleo__fila-pista" aria-hidden="true"><span class="nucleo__fila-barra" style="--valor: 0.66"></span></span>
+            <span class="nucleo__fila-valor codigo"><span class="solo-lector">puntaje </span><span class="nucleo__fila-cifra">0,660</span></span>
+            <span class="nucleo__fila-distintivo">Mejor puntaje</span>
+          </li>
+        </ul>
+        <p class="nucleo__recomendacion">
+          <span class="nucleo__recomendacion-etiqueta">Recomendación:</span>
+          <span class="nucleo__recomendacion-destino">Comuna 20</span>
+        </p>
+      </div>
+
+      <figcaption class="nucleo__aviso">
+        <span class="nucleo__aviso-marca rayado" aria-hidden="true"></span>
+        <span>Datos de prueba ficticios. Sirven para mostrar cómo funciona la regla; no son mediciones reales de las comunas.</span>
+      </figcaption>
+    </figure>
+
+    <!-- PARTE 2 · Simulador. Sin JavaScript los mandos quedan ocultos y se ve el resultado del lote por defecto. -->
+    <section class="nucleo__simulador" aria-labelledby="nucleo-simulador-titulo">
+      <div class="nucleo__sim-cabecera">
+        <div class="nucleo__sim-presentacion">
+          <h3 class="subtitulo" id="nucleo-simulador-titulo">Prueba la regla</h3>
+          <p class="nucleo__sim-intro" data-requiere-js hidden>
+            Elige un lote y mueve los pesos: el orden de las comunas se recalcula al instante con la misma fórmula.
+          </p>
+        </div>
+        <div class="nucleo__avisos">
+          <p class="nucleo__aviso">
+            <span class="nucleo__aviso-marca rayado" aria-hidden="true"></span>
+            <span>Datos de prueba ficticios. Sirven para mostrar cómo funciona la regla; no son mediciones reales de las comunas.</span>
+          </p>
+          <p class="nucleo__nota">
+            Los pesos son valores iniciales de partida y se calibrarán con datos de prueba en la actividad
+            <span class="codigo">A10</span>. Cada variable se normaliza en una escala de 0 a 1.
+          </p>
+        </div>
+      </div>
+
+      <div class="nucleo__sim-cuerpo">
+        <div class="nucleo__mandos" data-requiere-js hidden>
+          <fieldset class="nucleo__campo">
+            <legend class="nucleo__campo-titulo">Lote a repartir</legend>
+            <div class="nucleo__segmentado">
+              <label class="nucleo__opcion">
+                <input type="radio" name="nucleo-lote" value="agua" />
+                <span class="nucleo__opcion-cuerpo">
+                  <span class="nucleo__opcion-nombre">Agua potable</span>
+                  <span class="nucleo__opcion-detalle">400 litros, sin vencimiento cercano</span>
+                </span>
+              </label>
+              <label class="nucleo__opcion">
+                <input type="radio" name="nucleo-lote" value="aseo" />
+                <span class="nucleo__opcion-cuerpo">
+                  <span class="nucleo__opcion-nombre">Kits de aseo</span>
+                  <span class="nucleo__opcion-detalle">150 unidades, sin vencimiento cercano</span>
+                </span>
+              </label>
+              <label class="nucleo__opcion">
+                <input type="radio" name="nucleo-lote" value="perecederos" checked />
+                <span class="nucleo__opcion-cuerpo">
+                  <span class="nucleo__opcion-nombre">Alimentos perecederos</span>
+                  <span class="nucleo__opcion-detalle">Vencen en 4 días</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="nucleo__campo">
+            <legend class="nucleo__campo-titulo">Pesos de la regla</legend>
+            <div class="nucleo__pesos">
+              <div class="nucleo__mando" data-variable="urgencia">
+                <div class="nucleo__mando-cabeza">
+                  <label class="nucleo__mando-nombre" for="nucleo-peso-urgencia"><span class="nucleo__muestra nucleo__muestra--urgencia" aria-hidden="true"></span>Urgencia</label>
+                  <span class="nucleo__efectivo"><span class="nucleo__efectivo-texto">Peso efectivo</span><span class="nucleo__efectivo-cifra codigo">0,35</span></span>
+                </div>
+                <p class="nucleo__ayuda" id="nucleo-ayuda-urgencia">Qué tan grave es la necesidad reportada en el sector.</p>
+                <div class="nucleo__regla-mando">
+                  <input class="nucleo__rango" type="range" id="nucleo-peso-urgencia" min="0" max="100" step="1" value="35" aria-describedby="nucleo-ayuda-urgencia" />
+                  <span class="nucleo__escala" aria-hidden="true"><span class="nucleo__marca-informe" style="--informe: 0.35"></span></span>
+                </div>
+              </div>
+              <div class="nucleo__mando" data-variable="deficit">
+                <div class="nucleo__mando-cabeza">
+                  <label class="nucleo__mando-nombre" for="nucleo-peso-deficit"><span class="nucleo__muestra nucleo__muestra--deficit" aria-hidden="true"></span>Déficit</label>
+                  <span class="nucleo__efectivo"><span class="nucleo__efectivo-texto">Peso efectivo</span><span class="nucleo__efectivo-cifra codigo">0,30</span></span>
+                </div>
+                <p class="nucleo__ayuda" id="nucleo-ayuda-deficit">Cuánto le falta al sector de ese tipo de producto.</p>
+                <div class="nucleo__regla-mando">
+                  <input class="nucleo__rango" type="range" id="nucleo-peso-deficit" min="0" max="100" step="1" value="30" aria-describedby="nucleo-ayuda-deficit" />
+                  <span class="nucleo__escala" aria-hidden="true"><span class="nucleo__marca-informe" style="--informe: 0.3"></span></span>
+                </div>
+              </div>
+              <div class="nucleo__mando" data-variable="cercania">
+                <div class="nucleo__mando-cabeza">
+                  <label class="nucleo__mando-nombre" for="nucleo-peso-cercania"><span class="nucleo__muestra nucleo__muestra--cercania" aria-hidden="true"></span>Cercanía</label>
+                  <span class="nucleo__efectivo"><span class="nucleo__efectivo-texto">Peso efectivo</span><span class="nucleo__efectivo-cifra codigo">0,20</span></span>
+                </div>
+                <p class="nucleo__ayuda" id="nucleo-ayuda-cercania">Qué tan cerca está el sector del punto donde está el lote.</p>
+                <div class="nucleo__regla-mando">
+                  <input class="nucleo__rango" type="range" id="nucleo-peso-cercania" min="0" max="100" step="1" value="20" aria-describedby="nucleo-ayuda-cercania" />
+                  <span class="nucleo__escala" aria-hidden="true"><span class="nucleo__marca-informe" style="--informe: 0.2"></span></span>
+                </div>
+              </div>
+              <div class="nucleo__mando" data-variable="vencimiento">
+                <div class="nucleo__mando-cabeza">
+                  <label class="nucleo__mando-nombre" for="nucleo-peso-vencimiento"><span class="nucleo__muestra nucleo__muestra--vencimiento" aria-hidden="true"></span>Vencimiento</label>
+                  <span class="nucleo__efectivo"><span class="nucleo__efectivo-texto">Peso efectivo</span><span class="nucleo__efectivo-cifra codigo">0,15</span></span>
+                </div>
+                <p class="nucleo__ayuda" id="nucleo-ayuda-vencimiento">Qué tan pronto vence el lote y si el sector puede usarlo a tiempo.</p>
+                <div class="nucleo__regla-mando">
+                  <input class="nucleo__rango" type="range" id="nucleo-peso-vencimiento" min="0" max="100" step="1" value="15" aria-describedby="nucleo-ayuda-vencimiento" />
+                  <span class="nucleo__escala" aria-hidden="true"><span class="nucleo__marca-informe" style="--informe: 0.15"></span></span>
+                </div>
+              </div>
+            </div>
+            <p class="nucleo__pista-mandos">
+              Cada peso va de 0 a 100 y se divide por la suma de los cuatro, así que la regla siempre reparte el 100 %.
+              La marca triangular bajo cada regla señala el valor del informe.
+            </p>
+          </fieldset>
+
+          <p class="nucleo__formula-viva">
+            <span class="nucleo__formula-viva-titulo">Fórmula con estos pesos</span>
+            <span class="nucleo__formula-viva-texto">
+              Puntaje =
+              <span class="codigo" data-variable="urgencia">0,35</span><span aria-hidden="true"> · </span><span class="solo-lector"> por </span>Urgencia
+              + <span class="codigo" data-variable="deficit">0,30</span><span aria-hidden="true"> · </span><span class="solo-lector"> por </span>Déficit
+              + <span class="codigo" data-variable="cercania">0,20</span><span aria-hidden="true"> · </span><span class="solo-lector"> por </span>Cercanía
+              + <span class="codigo" data-variable="vencimiento">0,15</span><span aria-hidden="true"> · </span><span class="solo-lector"> por </span>Vencimiento
+            </span>
+          </p>
+
+          <button type="button" class="boton boton--contorno nucleo__restablecer">Restablecer los pesos del informe</button>
+        </div>
+
+        <div class="nucleo__resultados">
+          <div class="nucleo__veredicto">
+            <p class="nucleo__veredicto-titulo">Recomendación</p>
+            <p class="nucleo__veredicto-destino">Comuna 20</p>
+            <p class="nucleo__veredicto-detalle">Enviar alimentos perecederos con puntaje <span class="codigo">0,738</span>.</p>
+          </div>
+
+          <h4 class="nucleo__resultados-titulo" id="nucleo-resultados-titulo">
+            Orden de las comunas para <span class="nucleo__lote-actual">Alimentos perecederos</span>
+          </h4>
+
+          <ul class="nucleo__leyenda" role="list" aria-label="Aporte de cada variable en las barras">
+            <li><span class="nucleo__muestra nucleo__muestra--urgencia" aria-hidden="true"></span>Urgencia</li>
+            <li><span class="nucleo__muestra nucleo__muestra--deficit" aria-hidden="true"></span>Déficit</li>
+            <li><span class="nucleo__muestra nucleo__muestra--cercania" aria-hidden="true"></span>Cercanía</li>
+            <li><span class="nucleo__muestra nucleo__muestra--vencimiento" aria-hidden="true"></span>Vencimiento</li>
+          </ul>
+
+          <div class="nucleo__escala-cabecera" aria-hidden="true">
+            <span class="nucleo__escala-pista"><span class="codigo">0</span><span class="codigo">0,5</span><span class="codigo">1</span></span>
+          </div>
+
+          <ol class="nucleo__ranking" role="list" aria-labelledby="nucleo-resultados-titulo">
+            <li class="nucleo__puesto visor" data-comuna="c20">
+              <span class="nucleo__posicion codigo">1</span>
+              <span class="nucleo__puesto-nombre">Comuna 20</span>
+              <span class="nucleo__distintivo">Recomendado</span>
+              <span class="nucleo__apilada" aria-hidden="true">
+                <span class="nucleo__segmento nucleo__segmento--urgencia" style="--o: 0; --a: 0.245"></span>
+                <span class="nucleo__segmento nucleo__segmento--deficit" style="--o: 0.245; --a: 0.18"></span>
+                <span class="nucleo__segmento nucleo__segmento--cercania" style="--o: 0.425; --a: 0.17"></span>
+                <span class="nucleo__segmento nucleo__segmento--vencimiento" style="--o: 0.595; --a: 0.1425"></span>
+              </span>
+              <span class="nucleo__puesto-puntaje codigo">0,738</span>
+              <span class="solo-lector nucleo__puesto-aportes">Aportes: urgencia 0,245, déficit 0,180, cercanía 0,170 y vencimiento 0,143.</span>
+            </li>
+            <li class="nucleo__puesto visor" data-comuna="c18">
+              <span class="nucleo__posicion codigo">2</span>
+              <span class="nucleo__puesto-nombre">Comuna 18</span>
+              <span class="nucleo__distintivo">Recomendado</span>
+              <span class="nucleo__apilada" aria-hidden="true">
+                <span class="nucleo__segmento nucleo__segmento--urgencia" style="--o: 0; --a: 0.2275"></span>
+                <span class="nucleo__segmento nucleo__segmento--deficit" style="--o: 0.2275; --a: 0.24"></span>
+                <span class="nucleo__segmento nucleo__segmento--cercania" style="--o: 0.4675; --a: 0.14"></span>
+                <span class="nucleo__segmento nucleo__segmento--vencimiento" style="--o: 0.6075; --a: 0.12"></span>
+              </span>
+              <span class="nucleo__puesto-puntaje codigo">0,728</span>
+              <span class="solo-lector nucleo__puesto-aportes">Aportes: urgencia 0,228, déficit 0,240, cercanía 0,140 y vencimiento 0,120.</span>
+            </li>
+            <li class="nucleo__puesto visor" data-comuna="c15">
+              <span class="nucleo__posicion codigo">3</span>
+              <span class="nucleo__puesto-nombre">Comuna 15</span>
+              <span class="nucleo__distintivo">Recomendado</span>
+              <span class="nucleo__apilada" aria-hidden="true">
+                <span class="nucleo__segmento nucleo__segmento--urgencia" style="--o: 0; --a: 0.315"></span>
+                <span class="nucleo__segmento nucleo__segmento--deficit" style="--o: 0.315; --a: 0.21"></span>
+                <span class="nucleo__segmento nucleo__segmento--cercania" style="--o: 0.525; --a: 0.08"></span>
+                <span class="nucleo__segmento nucleo__segmento--vencimiento" style="--o: 0.605; --a: 0.0825"></span>
+              </span>
+              <span class="nucleo__puesto-puntaje codigo">0,688</span>
+              <span class="solo-lector nucleo__puesto-aportes">Aportes: urgencia 0,315, déficit 0,210, cercanía 0,080 y vencimiento 0,083.</span>
+            </li>
+            <li class="nucleo__puesto visor" data-comuna="c13">
+              <span class="nucleo__posicion codigo">4</span>
+              <span class="nucleo__puesto-nombre">Comuna 13</span>
+              <span class="nucleo__distintivo">Recomendado</span>
+              <span class="nucleo__apilada" aria-hidden="true">
+                <span class="nucleo__segmento nucleo__segmento--urgencia" style="--o: 0; --a: 0.28"></span>
+                <span class="nucleo__segmento nucleo__segmento--deficit" style="--o: 0.28; --a: 0.165"></span>
+                <span class="nucleo__segmento nucleo__segmento--cercania" style="--o: 0.445; --a: 0.11"></span>
+                <span class="nucleo__segmento nucleo__segmento--vencimiento" style="--o: 0.555; --a: 0.105"></span>
+              </span>
+              <span class="nucleo__puesto-puntaje codigo">0,660</span>
+              <span class="solo-lector nucleo__puesto-aportes">Aportes: urgencia 0,280, déficit 0,165, cercanía 0,110 y vencimiento 0,105.</span>
+            </li>
+            <li class="nucleo__puesto visor" data-comuna="c21">
+              <span class="nucleo__posicion codigo">5</span>
+              <span class="nucleo__puesto-nombre">Comuna 21</span>
+              <span class="nucleo__distintivo">Recomendado</span>
+              <span class="nucleo__apilada" aria-hidden="true">
+                <span class="nucleo__segmento nucleo__segmento--urgencia" style="--o: 0; --a: 0.3325"></span>
+                <span class="nucleo__segmento nucleo__segmento--deficit" style="--o: 0.3325; --a: 0.225"></span>
+                <span class="nucleo__segmento nucleo__segmento--cercania" style="--o: 0.5575; --a: 0.05"></span>
+                <span class="nucleo__segmento nucleo__segmento--vencimiento" style="--o: 0.6075; --a: 0.0525"></span>
+              </span>
+              <span class="nucleo__puesto-puntaje codigo">0,660</span>
+              <span class="solo-lector nucleo__puesto-aportes">Aportes: urgencia 0,333, déficit 0,225, cercanía 0,050 y vencimiento 0,053.</span>
+            </li>
+          </ol>
+
+          <p class="solo-lector nucleo__anuncio" aria-live="polite" aria-atomic="true"></p>
+
+          <details class="nucleo__datos">
+            <summary class="nucleo__datos-resumen">Ver los datos de entrada</summary>
+            <div class="nucleo__tabla-marco" tabindex="0" role="region" aria-labelledby="nucleo-tabla-leyenda">
+              <table class="tabla nucleo__tabla">
+                <caption id="nucleo-tabla-leyenda">
+                  Valores normalizados de 0 a 1 para el lote «Alimentos perecederos» y puntaje con los pesos actuales.
+                  Datos de prueba ficticios.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Comuna</th>
+                    <th scope="col">Urgencia</th>
+                    <th scope="col">Déficit</th>
+                    <th scope="col">Cercanía</th>
+                    <th scope="col">Vencimiento</th>
+                    <th scope="col">Puntaje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-comuna="c13">
+                    <th scope="row">Comuna 13</th>
+                    <td data-variable="urgencia">0,80</td>
+                    <td data-variable="deficit">0,55</td>
+                    <td data-variable="cercania">0,55</td>
+                    <td data-variable="vencimiento">0,70</td>
+                    <td data-dato="puntaje">0,660</td>
+                  </tr>
+                  <tr data-comuna="c15">
+                    <th scope="row">Comuna 15</th>
+                    <td data-variable="urgencia">0,90</td>
+                    <td data-variable="deficit">0,70</td>
+                    <td data-variable="cercania">0,40</td>
+                    <td data-variable="vencimiento">0,55</td>
+                    <td data-dato="puntaje">0,688</td>
+                  </tr>
+                  <tr data-comuna="c18">
+                    <th scope="row">Comuna 18</th>
+                    <td data-variable="urgencia">0,65</td>
+                    <td data-variable="deficit">0,80</td>
+                    <td data-variable="cercania">0,70</td>
+                    <td data-variable="vencimiento">0,80</td>
+                    <td data-dato="puntaje">0,728</td>
+                  </tr>
+                  <tr data-comuna="c20">
+                    <th scope="row">Comuna 20</th>
+                    <td data-variable="urgencia">0,70</td>
+                    <td data-variable="deficit">0,60</td>
+                    <td data-variable="cercania">0,85</td>
+                    <td data-variable="vencimiento">0,95</td>
+                    <td data-dato="puntaje">0,738</td>
+                  </tr>
+                  <tr data-comuna="c21">
+                    <th scope="row">Comuna 21</th>
+                    <td data-variable="urgencia">0,95</td>
+                    <td data-variable="deficit">0,75</td>
+                    <td data-variable="cercania">0,25</td>
+                    <td data-variable="vencimiento">0,35</td>
+                    <td data-dato="puntaje">0,660</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>

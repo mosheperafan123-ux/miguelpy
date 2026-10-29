@@ -1,0 +1,452 @@
+/* ==========================================================================
+   Portada (#inicio)
+   Capas, de atrás hacia delante: escena SVG de respaldo → video → velo → contenido.
+   A sangre completa: no usa .seccion.
+   ========================================================================== */
+
+#inicio {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100vh;
+  min-height: max(100vh, 640px);
+  min-height: max(100svh, 640px);
+  padding-top: 7rem;
+  overflow: hidden;
+  overflow: clip;
+  background: var(--negro);
+  color: var(--texto);
+  isolation: isolate;
+}
+
+/* ---------- Fondo ---------- */
+#inicio .inicio__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+
+#inicio .inicio__fondo-interior {
+  position: absolute;
+  inset: 0;
+  transform-origin: 62% 42%;
+}
+
+/* Escena: en pantallas apaisadas ocupa todo el fondo y se ancla a la derecha
+   (la composición vive en el 60 % derecho del viewBox). */
+#inicio .inicio__escena {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  color: var(--texto);
+  fill: none;
+  stroke-width: 1;
+}
+
+/* En vertical o estrecho el lienzo conserva su proporción 16:9 y se desplaza
+   para que la torreta quede detrás del texto, no recortada. */
+@media (max-width: 899px), (max-aspect-ratio: 4/3) {
+  #inicio .inicio__escena {
+    right: auto;
+    left: 62%;
+    width: auto;
+    aspect-ratio: 16 / 9;
+    transform: translateX(-66.25%);
+  }
+}
+
+#inicio .inicio__parada {
+  stop-color: var(--texto);
+}
+
+#inicio .inicio__linea-tenue {
+  stroke: var(--borde-fuerte);
+}
+
+#inicio .inicio__linea {
+  stroke: var(--texto-3);
+}
+
+#inicio .inicio__linea-clara {
+  stroke: var(--texto-2);
+}
+
+#inicio .inicio__relleno {
+  fill: var(--texto-3);
+}
+
+#inicio .inicio__relleno-claro {
+  fill: var(--texto);
+}
+
+#inicio .inicio__rutas {
+  stroke: var(--texto-3);
+  stroke-dasharray: 1 6;
+  opacity: 0.55;
+}
+
+#inicio .inicio__pulso,
+#inicio .inicio__barrido {
+  stroke: var(--texto-2);
+}
+
+#inicio .inicio__lote {
+  fill: var(--texto);
+}
+
+/* Sin JavaScript no se puede pausar el SMIL: con movimiento reducido se retiran
+   las piezas que viajan y laten. Con JavaScript, inicio.js deja la escena quieta. */
+@media (prefers-reduced-motion: reduce) {
+  #inicio:not(.inicio--activo) .inicio__lotes,
+  #inicio:not(.inicio--activo) .inicio__pulso,
+  #inicio:not(.inicio--activo) .inicio__destello,
+  #inicio:not(.inicio--activo) .inicio__desliza-punto {
+    display: none;
+  }
+}
+
+/* Video de la portada (lo genera el equipo con IA; mientras no exista, no se ve) */
+#inicio .inicio__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+
+#inicio .inicio__video[hidden] {
+  display: none;
+}
+
+/* ---------- Velo de legibilidad ---------- */
+#inicio .inicio__velo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    /* Franja superior: la barra invierte el color de lo que tiene debajo (difference) y
+       sobre los grises medios del video perdía contraste; sobre casi negro se lee en blanco. */
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--negro) 84%, transparent) 0%,
+      color-mix(in srgb, var(--negro) 55%, transparent) 9%,
+      transparent 24%
+    ),
+    linear-gradient(
+      to top,
+      var(--negro) 0%,
+      color-mix(in srgb, var(--negro) 78%, transparent) 18%,
+      transparent 52%
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--negro) 86%, transparent) 0%,
+      color-mix(in srgb, var(--negro) 52%, transparent) 38%,
+      transparent 70%
+    );
+}
+
+/* En móvil el texto ocupa todo el ancho: el fondo (escena o video) baja de intensidad. */
+@media (max-width: 899px) {
+  #inicio .inicio__velo {
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--negro) 70%, transparent) 0%,
+        transparent 16%
+      ),
+      linear-gradient(
+        to top,
+        var(--negro) 0%,
+        color-mix(in srgb, var(--negro) 84%, transparent) 42%,
+        color-mix(in srgb, var(--negro) 45%, transparent) 100%
+      );
+  }
+}
+
+/* ---------- Contenido ---------- */
+#inicio .inicio__contenido {
+  position: relative;
+  z-index: 2;
+  padding-bottom: clamp(1rem, 2.6vh, 2rem);
+}
+
+#inicio .inicio__titulo {
+  max-width: 13ch;
+  font-size: var(--t-display);
+  /* En pantallas bajas el titular no puede empujar el resto fuera de la portada */
+  font-size: min(var(--t-display), 11.5svh);
+  font-weight: 230;
+  font-variation-settings: 'wdth' 125;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: var(--blanco);
+}
+
+/* Metal cepillado. Con interlineado 0.92 los rasgos descendentes salen de la caja de
+   cada línea; el relleno compensado agranda el área pintada sin mover el texto. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  #inicio .inicio__titulo,
+  #inicio .inicio__titulo-linea {
+    padding-block: 0.12em;
+    margin-block: -0.12em;
+    background-image: var(--metal);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Dividido en líneas, el metal lo lleva cada línea (el padre ya no ve su texto
+     cuando las líneas tienen clip-path propio). */
+  #inicio .inicio__titulo--dividido {
+    background-image: none;
+  }
+
+  #inicio .inicio__titulo::selection,
+  #inicio .inicio__titulo ::selection {
+    -webkit-text-fill-color: var(--negro);
+    color: var(--negro);
+  }
+}
+
+#inicio .inicio__titulo-linea {
+  white-space: nowrap;
+}
+
+#inicio .inicio__fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: clamp(1.5rem, 3.2vh, 2.75rem);
+}
+
+#inicio .inicio__entradilla {
+  margin-top: 0;
+  max-width: 40ch;
+  font-size: var(--t-m);
+}
+
+@media (min-width: 600px) {
+  #inicio .inicio__entradilla {
+    font-size: var(--t-l);
+  }
+}
+
+#inicio .inicio__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Indicador de desplazamiento: filete con un punto que baja */
+#inicio .inicio__desliza {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  #inicio .inicio__desliza {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: var(--t-xs);
+    font-weight: 500;
+    font-variation-settings: 'wdth' 92;
+    line-height: 1.35;
+    color: var(--texto-3);
+  }
+}
+
+#inicio .inicio__desliza-filete {
+  flex: none;
+  width: 10px;
+  height: 56px;
+  overflow: visible;
+}
+
+#inicio .inicio__desliza-guia {
+  fill: none;
+  stroke: var(--borde-fuerte);
+  stroke-width: 1;
+}
+
+#inicio .inicio__desliza-punto {
+  fill: var(--texto);
+}
+
+#inicio .inicio__desliza-texto {
+  max-width: 13ch;
+}
+
+@media (min-width: 900px) {
+  #inicio .inicio__fila {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: end;
+  }
+
+  #inicio .inicio__entradilla {
+    grid-column: 1 / span 5;
+  }
+
+  #inicio .inicio__acciones {
+    grid-column: 6 / span 5;
+  }
+
+  #inicio .inicio__desliza {
+    grid-column: 11 / -1;
+    justify-self: end;
+  }
+}
+
+/* ---------- Banda de datos (lectura de instrumento) ---------- */
+#inicio .inicio__base {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 2rem;
+  margin-top: clamp(1.75rem, 4vh, 3.25rem);
+  padding-top: 1rem;
+}
+
+/* Regla graduada: un filete con marcas cada 16 px */
+#inicio .inicio__regla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background:
+    linear-gradient(var(--borde-fuerte), var(--borde-fuerte)) 0 0 / 100% 1px no-repeat,
+    repeating-linear-gradient(to right, var(--borde) 0 1px, transparent 1px 16px) 0 0 / 100% 5px no-repeat;
+  transform-origin: 0 50%;
+}
+
+#inicio .inicio__banda {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 0;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+#inicio .inicio__dato {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.15rem 0.85rem;
+  border-left: 1px solid var(--borde);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  font-variation-settings: 'wdth' 92;
+  line-height: 1.3;
+  color: var(--texto-2);
+}
+
+#inicio .inicio__dato:first-child,
+#inicio .inicio__dato--ancho {
+  grid-column: 1 / -1;
+}
+
+#inicio .inicio__dato-codigo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--texto);
+}
+
+@media (min-width: 640px) {
+  #inicio .inicio__banda {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #inicio .inicio__dato:first-child {
+    grid-column: span 2;
+  }
+
+  #inicio .inicio__dato--ancho {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  #inicio .inicio__banda {
+    display: flex;
+    flex: 0 1 auto;
+  }
+
+  #inicio .inicio__dato {
+    white-space: nowrap;
+  }
+}
+
+/* Pausa del movimiento (WCAG 2.2.2): pausa el video y la escena */
+#inicio .inicio__pausa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 44px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 0.9rem;
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--texto-2);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 92;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-ui) var(--ease-suave),
+    border-color var(--dur-ui) var(--ease-suave),
+    background-color var(--dur-ui) var(--ease-suave);
+}
+
+#inicio .inicio__pausa[hidden] {
+  display: none;
+}
+
+#inicio .inicio__pausa[data-pausado='true'] {
+  border-color: var(--texto);
+  background: var(--superficie-alta);
+  color: var(--texto);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #inicio .inicio__pausa:hover {
+    border-color: var(--texto);
+    color: var(--texto);
+  }
+}
+
+#inicio .inicio__pausa-icono {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+#inicio .inicio__icono-seguir,
+#inicio .inicio__pausa[data-pausado='true'] .inicio__icono-pausa {
+  display: none;
+}
+
+#inicio .inicio__pausa[data-pausado='true'] .inicio__icono-seguir {
+  display: inline;
+}

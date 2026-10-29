@@ -1,0 +1,313 @@
+/* ==========================================================================
+   1.2 Problema central, causas y efectos
+   El árbol del problema como placa de circuito: causas → chip → efectos.
+   ========================================================================== */
+
+#causas .causas__figura {
+  margin: 0;
+}
+
+#causas .causas__escena {
+  padding-block: 0.5rem;
+}
+
+/* ---------- Placa ----------
+   Las columnas usan display: contents para que etiquetas, listas y chip compartan
+   una sola rejilla (las listas y el chip quedan centrados entre sí). */
+#causas .causas__placa {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-left: 2rem; /* sitio para la espina vertical en móvil */
+}
+
+#causas .causas__columna {
+  display: contents;
+}
+
+#causas .causas__trazas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke-linejoin: round;
+}
+
+#causas .causas__etiqueta,
+#causas .causas__lista,
+#causas .causas__chip {
+  position: relative;
+  z-index: 1;
+}
+
+/* Etiqueta de columna con un filete que se prolonga, como el rótulo de un plano */
+#causas .causas__etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+#causas .causas__etiqueta::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--borde);
+}
+
+#causas .causas__lista {
+  display: grid;
+  gap: 0.875rem;
+}
+
+/* ---------- Nodos (causas y efectos) ---------- */
+#causas .causas__nodo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 4.75rem;
+  padding: 0.95rem 1.1rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  font-size: var(--t-s);
+  line-height: 1.45;
+  color: var(--texto);
+}
+
+/* Borde «con señal»: capa aparte para encenderla solo con opacidad */
+#causas .causas__marco {
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--texto-3);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#causas .causas__texto {
+  position: relative;
+  text-wrap: pretty;
+}
+
+/* ---------- Chip: el problema central ---------- */
+#causas .causas__chip {
+  margin-block: 2.25rem;
+  padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  padding-right: clamp(2.5rem, 2rem + 1.5vw, 3.25rem);
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio);
+}
+
+/* Muesca de orientación, como en un circuito integrado */
+#causas .causas__chip::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  z-index: 2;
+  width: 22px;
+  height: 11px;
+  transform: translateX(-50%);
+  background: var(--fondo);
+  border: 1px solid var(--texto-3);
+  border-top: 0;
+  border-radius: 0 0 11px 11px;
+}
+
+/* Marca de la pata 1 */
+#causas .causas__chip::after {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  bottom: 0.85rem;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--texto-3);
+  border-radius: 50%;
+}
+
+#causas .causas__chip-marco {
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  border: 1px solid var(--texto);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#causas .causas__led {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--texto-3);
+  border-radius: 50%;
+}
+
+#causas .causas__led-luz {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--texto);
+  box-shadow: 0 0 10px 2px color-mix(in srgb, var(--texto) 55%, transparent);
+}
+
+#causas .causas__chip-contenido {
+  position: relative;
+}
+
+#causas .causas__chip-titulo {
+  margin-top: 0.75rem;
+  max-width: 18ch;
+  font-size: clamp(1.375rem, 1rem + 1vw, var(--t-xl));
+  font-weight: 340;
+  font-variation-settings: 'wdth' 108;
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  text-wrap: balance;
+}
+
+#causas .causas__chip-texto {
+  max-width: 40ch;
+  margin-top: 1rem;
+  font-size: var(--t-s);
+  line-height: 1.55;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#causas .causas__pie {
+  margin-top: 2.5rem;
+}
+
+/* ---------- Escritorio: tres columnas ---------- */
+@media (min-width: 900px) {
+  #causas .causas__placa {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(3.5rem, 6.5vw, 7.5rem);
+    align-items: center;
+    padding-left: 0;
+  }
+
+  #causas .causas__columna--causas .causas__etiqueta {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #causas .causas__lista--causas {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  #causas .causas__chip {
+    grid-column: 2;
+    grid-row: 2;
+    margin-block: 0;
+  }
+
+  #causas .causas__columna--efectos .causas__etiqueta {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  #causas .causas__lista--efectos {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  #causas .causas__capa--movil {
+    display: none;
+  }
+}
+
+@media (max-width: 899.98px) {
+  #causas .causas__capa--escritorio {
+    display: none;
+  }
+}
+
+/* ---------- Trazas (SVG generado en JS; 1 unidad = 1px) ---------- */
+#causas .causas__traza-base {
+  stroke: var(--borde-fuerte);
+  stroke-width: 1;
+}
+
+/* pathLength="1": el trazo entero mide 1, así se dibuja con stroke-dashoffset de 1 a 0
+   aunque la geometría cambie al redimensionar. */
+#causas .causas__traza-luz {
+  stroke: var(--texto-2);
+  stroke-width: 1.25;
+  stroke-linecap: butt;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+#causas .causas__rama-luz {
+  stroke: var(--texto-2);
+  stroke-width: 1.25;
+}
+
+#causas .causas__pin {
+  fill: var(--borde-fuerte);
+}
+
+#causas .causas__pin-luz {
+  fill: var(--texto-2);
+}
+
+#causas .causas__via {
+  fill: var(--fondo);
+  stroke: var(--texto-3);
+  stroke-width: 1;
+}
+
+#causas .causas__punto {
+  fill: var(--texto);
+}
+
+/* Pulsos de datos: guiones cortos que recorren las trazas cuando el circuito ya está encendido */
+#causas .causas__pulso {
+  stroke: var(--texto);
+  stroke-width: 1.5;
+  stroke-linecap: butt;
+  stroke-dasharray: 0.035 0.965;
+  visibility: hidden;
+}
+
+#causas .causas__placa--viva .causas__pulso {
+  visibility: visible;
+  animation: causas-pulso 2.8s linear infinite;
+}
+
+@keyframes causas-pulso {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---------- Móvil: encendido por clases según avanza la espina ----------
+   La clase la pone el JS solo si hay movimiento; sin ella todo queda encendido. */
+#causas .causas__placa--secuencia :is(.causas__texto, .causas__chip-contenido) {
+  opacity: 0.55;
+  transition: opacity var(--dur-media) var(--ease-suave);
+}
+
+#causas .causas__placa--secuencia :is(.causas__marco, .causas__chip-marco, .causas__led-luz, .causas__rama-luz, .causas__punto) {
+  opacity: 0;
+  transition: opacity var(--dur-media) var(--ease-suave);
+}
+
+#causas .causas__placa--secuencia [data-encendido] :is(.causas__texto, .causas__chip-contenido, .causas__marco, .causas__chip-marco, .causas__led-luz),
+#causas .causas__placa--secuencia :is(.causas__rama-luz, .causas__punto)[data-encendido] {
+  opacity: 1;
+}

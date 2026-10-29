@@ -1,0 +1,534 @@
+/* ==========================================================================
+   Sistema de diseño · «La máquina de reparto»
+   Negro puro, blanco y grises de aluminio. Sin color de acento.
+   Lenguaje visual: plano técnico (cotas, visores, rayado de zonas excluidas).
+   ========================================================================== */
+
+:root {
+  /* Paleta base */
+  --negro: #000000;
+  --carbon: #141414;      /* placa elevada sobre negro */
+  --grafito: #1d1d1d;     /* placa más alta */
+  --acero: #2e2e2e;       /* líneas y bordes */
+  --acero-fuerte: #4a4a4a;
+  --titanio: #8a8a8a;     /* texto terciario sobre negro (6,1:1) */
+  --aluminio: #bdbdbd;    /* texto secundario sobre negro */
+  --blanco: #ffffff;
+  --papel: #efefef;       /* fondo de las placas claras */
+  --papel-alto: #e2e2e2;
+  --tinta-2: #3a3a3a;     /* texto secundario sobre papel */
+  --tinta-3: #5f5f5f;     /* texto terciario sobre papel (5,6:1) */
+  --linea-clara: #c6c6c6;
+
+  /* Etapas E1→E5: la hoja de ruta se «enciende» hacia el cierre */
+  --etapa-1: #5a5a5a;
+  --etapa-2: #7b7b7b;
+  --etapa-3: #a3a3a3;
+  --etapa-4: #cdcdcd;
+  --etapa-5: #ffffff;
+
+  /* Metal cepillado (solo para el titular principal y piezas puntuales) */
+  --metal: linear-gradient(100deg, #9a9a9a 0%, #ffffff 24%, #b4b4b4 46%, #f4f4f4 62%, #8e8e8e 100%);
+
+  /* Variables de contexto: las secciones claras las redefinen */
+  --fondo: var(--negro);
+  --texto: var(--blanco);
+  --texto-2: var(--aluminio);
+  --texto-3: var(--titanio);
+  --borde: var(--acero);
+  --borde-fuerte: var(--acero-fuerte);
+  --superficie: var(--carbon);
+  --superficie-alta: var(--grafito);
+
+  /* Tipografía */
+  --fuente: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --fuente-matriz: 'Doto', 'Archivo', ui-monospace, monospace;
+
+  /* Escala tipográfica (base 17 px) */
+  --t-xs: 0.8125rem;   /* 13 */
+  --t-s: 0.9375rem;    /* 15 */
+  --t-m: 1.0625rem;    /* 17 */
+  --t-l: 1.3125rem;    /* 21 */
+  --t-xl: 1.75rem;     /* 28 */
+  --t-2xl: 2.25rem;    /* 36 */
+  --t-titulo: clamp(2.25rem, 1.1rem + 4.4vw, 4.75rem);
+  --t-display: clamp(2.6rem, 0.6rem + 8.2vw, 9.25rem);
+  --t-cifra: clamp(2.75rem, 1.4rem + 5.2vw, 5.5rem);
+
+  /* Espacio y retícula */
+  --margen: clamp(16px, 4.2vw, 64px);
+  --ancho: 1440px;
+  --gutter: clamp(16px, 2vw, 28px);
+  --seccion-y: clamp(6rem, 3.5rem + 9vw, 12rem);
+  --radio: 3px;
+
+  /* Movimiento */
+  --ease-salida: cubic-bezier(0.19, 1, 0.22, 1);     /* entradas */
+  --ease-mov: cubic-bezier(0.77, 0, 0.175, 1);       /* desplazamientos en pantalla */
+  --ease-suave: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* hover y color */
+  --dur-micro: 150ms;
+  --dur-ui: 250ms;
+  --dur-media: 600ms;
+
+  color-scheme: dark;
+}
+
+/* ---------- Reset mínimo ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--negro);
+}
+
+body {
+  margin: 0;
+  background: var(--negro);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: var(--t-m);
+  font-weight: 380;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+::selection {
+  background: var(--blanco);
+  color: var(--negro);
+}
+
+:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ---------- Utilidades de accesibilidad ---------- */
+.solo-lector {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.saltar {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  background: var(--blanco);
+  color: var(--negro);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform var(--dur-ui) var(--ease-salida);
+}
+
+.saltar:focus-visible {
+  transform: none;
+}
+
+/* ---------- Estructura ---------- */
+.contenedor {
+  width: min(100% - 2 * var(--margen), var(--ancho));
+  margin-inline: auto;
+}
+
+.seccion {
+  position: relative;
+  padding-block: var(--seccion-y);
+  background: var(--fondo);
+  color: var(--texto);
+  /* clip (no hidden): recorta lo que sobresale en horizontal sin crear un contenedor de
+     desplazamiento, así que no rompe position: sticky ni los anclajes de ScrollTrigger.
+     Sin esto, en móvil el navegador ensancha la página y la barra queda fuera de pantalla. */
+  overflow-x: clip;
+}
+
+/* Las tablas que se desplazan en horizontal son el bloque contenedor de sus textos ocultos
+   (.solo-lector); si no, esos textos se escapan del desplazamiento y ensanchan la página. */
+[role='region'][tabindex='0'] {
+  position: relative;
+}
+
+/* Placa clara: invierte las variables de contexto */
+.seccion--clara {
+  --fondo: var(--papel);
+  --texto: var(--negro);
+  --texto-2: var(--tinta-2);
+  --texto-3: var(--tinta-3);
+  --borde: var(--linea-clara);
+  --borde-fuerte: #9c9c9c;
+  --superficie: var(--papel-alto);
+  --superficie-alta: #d6d6d6;
+  color-scheme: light;
+}
+
+/* Dos placas claras seguidas se leen como un solo bloque */
+.seccion--clara + .seccion--clara {
+  padding-top: calc(var(--seccion-y) * 0.5);
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+/* ---------- Cabecera de sección ----------
+   <header class="cabecera-seccion">
+     <p class="ref-capitulo">1.2</p>
+     <div>
+       <h2 class="titulo-seccion" data-extender>…</h2>
+       <p class="entradilla">…</p>
+     </div>
+   </header>
+*/
+.cabecera-seccion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+@media (min-width: 900px) {
+  .cabecera-seccion {
+    grid-template-columns: minmax(7rem, 2fr) minmax(0, 10fr);
+    gap: var(--gutter);
+  }
+}
+
+.ref-capitulo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--texto-3);
+  padding-top: 0.6em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ref-capitulo span {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--fuente);
+  font-weight: 500;
+  font-size: var(--t-xs);
+  font-variation-settings: 'wdth' 88;
+  letter-spacing: 0.01em;
+}
+
+.titulo-seccion {
+  font-size: var(--t-titulo);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 112;
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.entradilla {
+  margin-top: 1.5rem;
+  font-size: var(--t-l);
+  line-height: 1.5;
+  color: var(--texto-2);
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+.prosa > * + * {
+  margin-top: 1em;
+}
+
+.prosa p {
+  max-width: 68ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+.subtitulo {
+  font-size: var(--t-xl);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 106;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+}
+
+.etiqueta {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  line-height: 1.3;
+  color: var(--texto-3);
+}
+
+/* ---------- Matriz de puntos (Doto) ---------- */
+.codigo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cifra {
+  font-family: var(--fuente-matriz);
+  font-weight: 750;
+  font-size: var(--t-cifra);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Placa grabada ---------- */
+.placa {
+  position: relative;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+/* Visor: esquinas en L, como el encuadre de una cámara de máquina */
+.visor {
+  --visor-color: var(--texto-3);
+  --visor-largo: 14px;
+  --visor-trazo: linear-gradient(var(--visor-color), var(--visor-color));
+  /* Propiedades sueltas (no el atajo background) para no borrar el fondo de .placa */
+  background-image:
+    var(--visor-trazo), var(--visor-trazo), var(--visor-trazo), var(--visor-trazo),
+    var(--visor-trazo), var(--visor-trazo), var(--visor-trazo), var(--visor-trazo);
+  background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+  background-size:
+    var(--visor-largo) 1px, 1px var(--visor-largo), var(--visor-largo) 1px, 1px var(--visor-largo),
+    var(--visor-largo) 1px, 1px var(--visor-largo), var(--visor-largo) 1px, 1px var(--visor-largo);
+  background-repeat: no-repeat;
+}
+
+/* Cota: línea de medida con remates, como en un plano.
+   <div class="cota"><span class="cota__texto">16 semanas</span></div> */
+.cota {
+  position: relative;
+  height: 1px;
+  background: var(--texto-3);
+  margin-block: 0.9rem;
+}
+
+.cota::before,
+.cota::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: var(--texto-3);
+}
+
+.cota::before {
+  left: 0;
+}
+
+.cota::after {
+  right: 0;
+}
+
+.cota__texto {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 0.6em;
+  background: var(--fondo);
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  color: var(--texto-2);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Rayado de zona excluida (convención de plano técnico) */
+.rayado {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 7px,
+    color-mix(in srgb, var(--texto) 14%, transparent) 7px 8px
+  );
+}
+
+/* ---------- Botones ---------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--texto);
+  border-radius: var(--radio);
+  background: var(--texto);
+  color: var(--fondo);
+  font-size: var(--t-s);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-ui) var(--ease-suave),
+    color var(--dur-ui) var(--ease-suave),
+    transform var(--dur-micro) var(--ease-suave);
+}
+
+.boton--contorno {
+  background: transparent;
+  color: var(--texto);
+  border-color: var(--borde-fuerte);
+}
+
+.boton:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .boton:hover {
+    background: transparent;
+    color: var(--texto);
+  }
+
+  .boton--contorno:hover {
+    background: var(--texto);
+    color: var(--fondo);
+    border-color: var(--texto);
+  }
+}
+
+/* Chips de código (A1, OE3, SL…) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4em;
+  padding: 0.3em 0.55em 0.25em;
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 2px;
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--texto);
+}
+
+/* Chip de texto corrido (por ejemplo «Ley 1581 de 2012»): Archivo en vez de matriz de puntos */
+.chip--texto {
+  font-family: var(--fuente);
+  font-weight: 500;
+  font-size: var(--t-xs);
+  font-variation-settings: 'wdth' 92;
+  line-height: 1.2;
+}
+
+/* Tablas de datos (base común; cada sección puede ajustar) */
+/* separate + spacing 0: los bordes acompañan a las columnas fijas (sticky) al desplazar */
+.tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--t-s);
+}
+
+.tabla caption {
+  text-align: left;
+  padding-bottom: 1rem;
+  color: var(--texto-3);
+  font-size: var(--t-xs);
+}
+
+.tabla th,
+.tabla td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+  vertical-align: top;
+}
+
+.tabla thead th {
+  font-weight: 560;
+  font-size: var(--t-xs);
+  font-variation-settings: 'wdth' 86;
+  color: var(--texto-3);
+  border-bottom-color: var(--borde-fuerte);
+}
+
+.nota-fuente {
+  margin-top: 1.25rem;
+  font-size: var(--t-xs);
+  color: var(--texto-3);
+}
+
+/* ---------- Movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

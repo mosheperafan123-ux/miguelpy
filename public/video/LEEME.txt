@@ -1,0 +1,11 @@
+Aquí va el video de la portada.
+
+Nombres exactos que espera la página:
+  inicio.mp4         video principal (H.264, 1920x1080, 8-12 s, sin sonido, menos de 10 MB)
+  inicio.webm        opcional, versión más liviana (VP9 o AV1)
+  inicio-poster.jpg  opcional, un fotograma del video (1920x1080) que se ve mientras carga
+
+Composición: el sujeto del video debe quedar a la derecha (en torno al 62 % del ancho)
+y el tercio izquierdo oscuro y vacío, porque ahí va el titular.
+
+Mientras no exista inicio.mp4, la portada muestra una escena animada en SVG.

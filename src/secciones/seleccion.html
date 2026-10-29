@@ -1,0 +1,269 @@
+<section id="seleccion" class="seccion" data-capitulo="2.1" data-titulo-corto="Selección" aria-labelledby="seleccion-titulo">
+  <div class="contenedor">
+    <header class="cabecera-seccion">
+      <p class="ref-capitulo">2.1<span>Selección de la solución</span></p>
+      <div>
+        <h2 class="titulo-seccion" id="seleccion-titulo" data-extender>Por qué el algoritmo de cruce</h2>
+        <p class="entradilla">A partir del árbol del problema, el equipo generó alternativas y escogió las tres mejores.</p>
+        <div class="prosa seleccion__criterios">
+          <p>Para decidir el podio se discutieron criterios técnicos (viabilidad con herramientas gratuitas, complejidad frente a la experiencia del equipo y tiempo disponible) y sociales (impacto sobre la equidad en la entrega, contribución a la confianza y utilidad para líderes comunitarios).</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Matriz de decisión: cada puntaje es un medidor LED de cinco segmentos -->
+    <figure class="seleccion__matriz">
+      <div class="seleccion__desplazable visor" tabindex="0" role="region" aria-label="Matriz de decisión, se desplaza en horizontal">
+        <table class="tabla seleccion__tabla">
+          <caption>Matriz de decisión, escala de 1 a 5</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="seleccion__col-criterio">Criterio</th>
+              <th scope="col" class="seleccion__col-tipo">Tipo</th>
+              <th scope="col" class="seleccion__col-idea">
+                <span class="seleccion__idea-codigo">Idea 1<span class="solo-lector">:</span></span>
+                <span class="seleccion__idea-nombre">Base de donaciones</span>
+              </th>
+              <th scope="col" class="seleccion__col-idea">
+                <span class="seleccion__idea-codigo">Idea 2<span class="solo-lector">:</span></span>
+                <span class="seleccion__idea-nombre">Registro de necesidades</span>
+              </th>
+              <th scope="col" class="seleccion__col-idea seleccion__elegida">
+                <span class="seleccion__idea-codigo">Idea 3<span class="solo-lector">:</span></span>
+                <span class="seleccion__idea-nombre">Algoritmo de cruce</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Impacto directo sobre el problema central</th>
+              <td class="seleccion__tipo">Social</td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span></span><span class="seleccion__digito">5</span></span>
+                <span class="solo-lector">5 de 5</span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Aporte a la equidad y la confianza</th>
+              <td class="seleccion__tipo">Social</td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">4</span></span>
+                <span class="solo-lector">4 de 5</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span></span><span class="seleccion__digito">5</span></span>
+                <span class="solo-lector">5 de 5</span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Viabilidad con herramientas gratuitas</th>
+              <td class="seleccion__tipo">Técnico</td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span></span><span class="seleccion__digito">5</span></span>
+                <span class="solo-lector">5 de 5</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">4</span></span>
+                <span class="solo-lector">4 de 5</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">4</span></span>
+                <span class="solo-lector">4 de 5</span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Cumplimiento en un semestre</th>
+              <td class="seleccion__tipo">Técnico</td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span></span><span class="seleccion__digito">5</span></span>
+                <span class="solo-lector">5 de 5</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">4</span></span>
+                <span class="solo-lector">4 de 5</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Respuesta a la pregunta de ingeniería</th>
+              <td class="seleccion__tipo">Técnico</td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg"></span><span class="seleccion__seg"></span></span><span class="seleccion__digito">3</span></span>
+                <span class="solo-lector">3 de 5</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__puntaje" aria-hidden="true"><span class="seleccion__medidor"><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span><span class="seleccion__seg seleccion__seg--on"></span></span><span class="seleccion__digito">5</span></span>
+                <span class="solo-lector">5 de 5</span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">Total <span class="seleccion__total-nota">(máx. 25)</span></th>
+              <td class="seleccion__tipo"></td>
+              <td class="seleccion__celda">
+                <span class="seleccion__total" aria-hidden="true"><span class="seleccion__total-cifra" data-total="0">19</span><span class="seleccion__total-max">/25</span></span>
+                <span class="solo-lector">19 de 25</span>
+              </td>
+              <td class="seleccion__celda">
+                <span class="seleccion__total" aria-hidden="true"><span class="seleccion__total-cifra" data-total="1">18</span><span class="seleccion__total-max">/25</span></span>
+                <span class="solo-lector">18 de 25</span>
+              </td>
+              <td class="seleccion__celda seleccion__elegida">
+                <span class="seleccion__total" aria-hidden="true"><span class="seleccion__total-cifra" data-total="2">22</span><span class="seleccion__total-max">/25</span></span>
+                <span class="solo-lector">22 de 25</span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <figcaption class="nota-fuente">Valoración propuesta del equipo en escala de 1 (bajo) a 5 (alto). Fuente: elaboración propia.</figcaption>
+    </figure>
+
+    <!-- Podio: orden visual 2.º, 1.er, 3.er en escritorio; el orden del DOM es el del puesto -->
+    <div class="seleccion__podio-bloque">
+      <h3 class="subtitulo seleccion__podio-titulo">El podio</h3>
+      <ol class="seleccion__podio" role="list">
+        <li class="seleccion__puesto seleccion__puesto--1">
+          <div class="seleccion__placa">
+            <p class="seleccion__puesto-numero">1<span class="seleccion__ordinal">.er</span><span class="solo-lector"> puesto</span></p>
+            <h4 class="seleccion__puesto-idea"><span class="seleccion__puesto-codigo">Idea 3</span> Algoritmo de cruce oferta-demanda</h4>
+            <p class="seleccion__puesto-razon">Convierte los datos en decisiones; ataca la acumulación y el desperdicio.</p>
+            <p class="seleccion__puesto-puntaje"><span class="etiqueta">Puntaje total</span> <span class="seleccion__puesto-cifra">22<span class="seleccion__puesto-max">/25</span></span></p>
+          </div>
+        </li>
+        <li class="seleccion__puesto seleccion__puesto--2">
+          <div class="seleccion__placa">
+            <p class="seleccion__puesto-numero">2<span class="seleccion__ordinal">.º</span><span class="solo-lector"> puesto</span></p>
+            <h4 class="seleccion__puesto-idea"><span class="seleccion__puesto-codigo">Idea 1</span> Base de datos centralizada de donaciones</h4>
+            <p class="seleccion__puesto-razon">Alimenta el algoritmo con la oferta (tipo, cantidad, vencimiento y ubicación).</p>
+            <p class="seleccion__puesto-puntaje"><span class="etiqueta">Puntaje total</span> <span class="seleccion__puesto-cifra">19<span class="seleccion__puesto-max">/25</span></span></p>
+          </div>
+        </li>
+        <li class="seleccion__puesto seleccion__puesto--3">
+          <div class="seleccion__placa">
+            <p class="seleccion__puesto-numero">3<span class="seleccion__ordinal">.er</span><span class="solo-lector"> puesto</span></p>
+            <h4 class="seleccion__puesto-idea"><span class="seleccion__puesto-codigo">Idea 2</span> Registro de necesidades por sector</h4>
+            <p class="seleccion__puesto-razon">Alimenta el algoritmo con la demanda real de cada comuna (formulario o WhatsApp).</p>
+            <p class="seleccion__puesto-puntaje"><span class="etiqueta">Puntaje total</span> <span class="seleccion__puesto-cifra">18<span class="seleccion__puesto-max">/25</span></span></p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Integración: la oferta y la demanda entran como trazas de circuito al núcleo -->
+    <figure class="seleccion__integracion">
+      <figcaption class="seleccion__integracion-texto">
+        <h3 class="subtitulo">Las tres ideas en un solo prototipo</h3>
+        <p>Como el algoritmo necesita las otras dos ideas como fuente de datos, el prototipo integrará las tres, con la idea 3 como núcleo del sistema.</p>
+      </figcaption>
+
+      <div class="seleccion__diagramas">
+        <!-- Escritorio: de izquierda a derecha -->
+        <svg class="seleccion__diagrama seleccion__diagrama--horizontal" viewBox="0 20 960 282" role="img" aria-labelledby="seleccion-dh-titulo seleccion-dh-desc" focusable="false">
+          <title id="seleccion-dh-titulo">Integración de las tres ideas</title>
+          <desc id="seleccion-dh-desc">La idea 1, base de donaciones, aporta la oferta y la idea 2, registro de necesidades, aporta la demanda. Ambas alimentan la idea 3, el algoritmo de cruce, que entrega la recomendación de destino.</desc>
+
+          <path class="seleccion__traza seleccion__traza--entrada" d="M281 68 H360 V140 H420" />
+          <path class="seleccion__traza seleccion__traza--entrada" d="M281 254 H360 V182 H420" />
+          <path class="seleccion__traza seleccion__traza--salida" d="M670 161 H771" />
+          <path class="seleccion__flecha" d="M770 155 L780 161 L770 167 Z" />
+
+          <text class="seleccion__svg-flujo" x="296" y="56">Oferta</text>
+          <text class="seleccion__svg-flujo" x="296" y="242">Demanda</text>
+
+          <g class="seleccion__vias">
+            <circle class="seleccion__via" cx="360" cy="68" r="4" />
+            <circle class="seleccion__via" cx="360" cy="140" r="4" />
+            <circle class="seleccion__via" cx="360" cy="254" r="4" />
+            <circle class="seleccion__via" cx="360" cy="182" r="4" />
+          </g>
+
+          <rect class="seleccion__nodo" x="0.75" y="24" width="280" height="88" rx="3" />
+          <text class="seleccion__svg-etiqueta" x="24" y="56">Idea 1</text>
+          <text class="seleccion__svg-nombre" x="24" y="86">Base de donaciones</text>
+
+          <rect class="seleccion__nodo" x="0.75" y="210" width="280" height="88" rx="3" />
+          <text class="seleccion__svg-etiqueta" x="24" y="242">Idea 2</text>
+          <text class="seleccion__svg-nombre" x="24" y="272">Registro de necesidades</text>
+
+          <rect class="seleccion__nodo seleccion__nodo--nucleo" x="420" y="100" width="250" height="122" rx="3" />
+          <rect class="seleccion__pin" x="417" y="137" width="6" height="6" />
+          <rect class="seleccion__pin" x="417" y="179" width="6" height="6" />
+          <path class="seleccion__esquinas" d="M412 106 V92 H426 M664 92 H678 V106 M678 216 V230 H664 M426 230 H412 V216" />
+          <text class="seleccion__svg-etiqueta" x="446" y="140">Idea 3</text>
+          <text class="seleccion__svg-nombre seleccion__svg-nombre--nucleo" x="446" y="170">Algoritmo de cruce</text>
+          <text class="seleccion__svg-etiqueta" x="446" y="198">Núcleo del sistema</text>
+
+          <rect class="seleccion__salida-relleno" x="780" y="121" width="179" height="80" rx="3" />
+          <rect class="seleccion__salida-marco" x="780" y="121" width="179" height="80" rx="3" />
+          <text class="seleccion__svg-salida" x="800" y="156">Recomendación</text>
+          <text class="seleccion__svg-salida" x="800" y="180">de destino</text>
+        </svg>
+
+        <!-- Móvil: de arriba abajo -->
+        <svg class="seleccion__diagrama seleccion__diagrama--vertical" viewBox="0 0 360 482" role="img" aria-labelledby="seleccion-dv-titulo seleccion-dv-desc" focusable="false">
+          <title id="seleccion-dv-titulo">Integración de las tres ideas</title>
+          <desc id="seleccion-dv-desc">La idea 1, base de donaciones, aporta la oferta y la idea 2, registro de necesidades, aporta la demanda. Ambas alimentan la idea 3, el algoritmo de cruce, que entrega la recomendación de destino.</desc>
+
+          <path class="seleccion__traza seleccion__traza--entrada" d="M84.75 89.5 V142 H150 V200" />
+          <path class="seleccion__traza seleccion__traza--entrada" d="M275.25 89.5 V142 H210 V200" />
+          <path class="seleccion__traza seleccion__traza--salida" d="M180 320 V391" />
+          <path class="seleccion__flecha" d="M174 390 L180 400 L186 390 Z" />
+
+          <text class="seleccion__svg-flujo" x="94" y="124">Oferta</text>
+          <text class="seleccion__svg-flujo" x="285" y="124">Demanda</text>
+
+          <g class="seleccion__vias">
+            <circle class="seleccion__via" cx="84.75" cy="142" r="4" />
+            <circle class="seleccion__via" cx="150" cy="142" r="4" />
+            <circle class="seleccion__via" cx="275.25" cy="142" r="4" />
+            <circle class="seleccion__via" cx="210" cy="142" r="4" />
+          </g>
+
+          <rect class="seleccion__nodo" x="0.75" y="0.75" width="168" height="88" rx="3" />
+          <text class="seleccion__svg-etiqueta" x="16" y="28">Idea 1</text>
+          <text class="seleccion__svg-nombre" x="16" y="54">Base de</text>
+          <text class="seleccion__svg-nombre" x="16" y="76">donaciones</text>
+
+          <rect class="seleccion__nodo" x="191.25" y="0.75" width="168" height="88" rx="3" />
+          <text class="seleccion__svg-etiqueta" x="207" y="28">Idea 2</text>
+          <text class="seleccion__svg-nombre" x="207" y="54">Registro de</text>
+          <text class="seleccion__svg-nombre" x="207" y="76">necesidades</text>
+
+          <rect class="seleccion__nodo seleccion__nodo--nucleo" x="60" y="200" width="240" height="120" rx="3" />
+          <rect class="seleccion__pin" x="147" y="197" width="6" height="6" />
+          <rect class="seleccion__pin" x="207" y="197" width="6" height="6" />
+          <path class="seleccion__esquinas" d="M52 206 V192 H66 M294 192 H308 V206 M308 314 V328 H294 M66 328 H52 V314" />
+          <text class="seleccion__svg-etiqueta" x="84" y="236">Idea 3</text>
+          <text class="seleccion__svg-nombre seleccion__svg-nombre--nucleo" x="84" y="266">Algoritmo de cruce</text>
+          <text class="seleccion__svg-etiqueta" x="84" y="294">Núcleo del sistema</text>
+
+          <rect class="seleccion__salida-relleno" x="60" y="400" width="240" height="80" rx="3" />
+          <rect class="seleccion__salida-marco" x="60" y="400" width="240" height="80" rx="3" />
+          <text class="seleccion__svg-salida" x="84" y="434">Recomendación</text>
+          <text class="seleccion__svg-salida" x="84" y="458">de destino</text>
+        </svg>
+      </div>
+    </figure>
+  </div>
+</section>
