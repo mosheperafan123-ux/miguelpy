@@ -185,49 +185,47 @@ export function correrPrecarga({ reducido, smoother }, alAbrir) {
     return;
   }
 
-  let vista = false;
-  try {
-    vista = sessionStorage.getItem('precarga-vista') === '1';
-    sessionStorage.setItem('precarga-vista', '1');
-  } catch {
-    vista = false;
-  }
-
   document.documentElement.classList.add('bloqueado');
   smoother?.paused(true);
+
+  // La compuerta no se abre hasta que llegan las fuentes, así el titular entra ya con su
+  // tipografía y no cambia de forma a mitad de la entrada. Tope: 4 s desde que empieza la carga.
+  const fuentesListas = Promise.race([
+    document.fonts?.ready ?? Promise.resolve(),
+    new Promise((resolver) => setTimeout(resolver, 4000)),
+  ]);
 
   const cifra = precarga.querySelector('.precarga__cifra');
   const texto = precarga.querySelector('.precarga__texto');
   const estado = { n: 0 };
   const tl = gsap.timeline({ onComplete: terminar });
 
-  if (!vista) {
-    tl.from(precarga.querySelectorAll('.precarga__traza'), { drawSVG: 0, duration: 0.75, stagger: 0.14, ease: 'power2.inOut' }, 0.1)
-      .from(precarga.querySelector('.precarga__anillo'), { drawSVG: '50% 50%', duration: 0.9, ease: 'power3.inOut' }, 0)
-      .from(
-        precarga.querySelectorAll('.precarga__nodo'),
-        { scale: 0, transformOrigin: '50% 50%', duration: 0.5, stagger: 0.07, ease: 'back.out(2.2)' },
-        0.35,
-      )
-      .to(
-        estado,
-        {
-          n: 100,
-          duration: 1.75,
-          ease: 'power2.inOut',
-          onUpdate: () => {
-            cifra.textContent = String(Math.round(estado.n)).padStart(3, '0');
-          },
+  // La pantalla de carga completa se ve en cada visita (no solo en la primera de la sesión).
+  tl.from(precarga.querySelectorAll('.precarga__traza'), { drawSVG: 0, duration: 0.75, stagger: 0.14, ease: 'power2.inOut' }, 0.1)
+    .from(precarga.querySelector('.precarga__anillo'), { drawSVG: '50% 50%', duration: 0.9, ease: 'power3.inOut' }, 0)
+    .from(
+      precarga.querySelectorAll('.precarga__nodo'),
+      { scale: 0, transformOrigin: '50% 50%', duration: 0.5, stagger: 0.07, ease: 'back.out(2.2)' },
+      0.35,
+    )
+    .to(
+      estado,
+      {
+        n: 100,
+        duration: 1.75,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          cifra.textContent = String(Math.round(estado.n)).padStart(3, '0');
         },
-        0,
-      )
-      .to(texto, { duration: 0.45, scrambleText: { text: 'Leyendo demanda', chars: '01', speed: 0.8 } }, 0.55)
-      .to(texto, { duration: 0.45, scrambleText: { text: 'Cruzando datos', chars: '01', speed: 0.8 } }, 1.05)
-      .to(texto, { duration: 0.45, scrambleText: { text: 'Red en línea', chars: '01', speed: 0.8 } }, 1.55)
-      .to(precarga.querySelector('.precarga__nucleo'), { opacity: 0, scale: 0.94, duration: 0.45, ease: 'power2.in' }, 2.1);
-  } else {
-    tl.set(precarga.querySelector('.precarga__nucleo'), { opacity: 0 });
-  }
+      },
+      0,
+    )
+    .to(texto, { duration: 0.45, scrambleText: { text: 'Leyendo demanda', chars: '01', speed: 0.8 } }, 0.55)
+    .to(texto, { duration: 0.45, scrambleText: { text: 'Cruzando datos', chars: '01', speed: 0.8 } }, 1.05)
+    .to(texto, { duration: 0.45, scrambleText: { text: 'Red en línea', chars: '01', speed: 0.8 } }, 1.55)
+    // Con «Red en línea» a la vista, la línea de tiempo espera a las fuentes y luego sigue.
+    .addPause(2.05, () => fuentesListas.then(() => tl.play()))
+    .to(precarga.querySelector('.precarga__nucleo'), { opacity: 0, scale: 0.94, duration: 0.45, ease: 'power2.in' }, 2.1);
 
   tl.addLabel('abrir')
     .to(precarga.querySelector('.precarga__obturador--arriba'), { yPercent: -101, duration: 1.15, ease: 'expo.inOut' }, 'abrir')
