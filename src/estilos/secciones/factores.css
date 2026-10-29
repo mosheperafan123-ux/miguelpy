@@ -1,0 +1,224 @@
+/* ==========================================================================
+   1.3 Factores · panel de instrumentos 2×2
+   La cruz de filetes con la «+» en el centro hace de retículo de mira:
+   las cuatro dimensiones se leen como cuadrantes de un mismo instrumento.
+   ========================================================================== */
+
+#factores .factores__panel {
+  --factores-hueco: clamp(2rem, 0.9rem + 3.2vw, 4.75rem);
+  --factores-claro: 22px; /* hueco de la cruz alrededor de la «+» */
+  position: relative;
+}
+
+#factores .factores__cuadrantes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Móvil: una dimensión debajo de otra, separadas por un filete */
+#factores .factores__cuadrante {
+  padding-block: 2.75rem;
+  border-top: 1px solid var(--borde);
+}
+
+#factores .factores__cuadrante:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+#factores .factores__cuadrante:last-child {
+  padding-bottom: 0;
+}
+
+/* Pictogramas de trazo fino: se dibujan una vez al entrar (ver factores.js) */
+#factores .factores__picto {
+  width: clamp(3.5rem, 2.9rem + 1.6vw, 4.5rem);
+  height: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+  color: var(--texto);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#factores .factores__nombre {
+  margin-top: clamp(1.5rem, 1rem + 1.2vw, 2.25rem);
+  font-size: var(--t-2xl);
+  font-weight: 300;
+  font-variation-settings: 'wdth' 120;
+  line-height: 1.02;
+  letter-spacing: -0.024em;
+}
+
+#factores .factores__descripcion {
+  margin-top: 1rem;
+  max-width: 44ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#factores .factores__normas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Chips de texto: la ley se lee mejor en Archivo que en matriz de puntos */
+#factores .factores__norma {
+  min-width: 0;
+  padding: 0.55em 0.8em 0.5em;
+  font-family: var(--fuente);
+  font-size: var(--t-xs);
+  font-weight: 520;
+  font-variation-settings: 'wdth' 94;
+  letter-spacing: 0.005em;
+  line-height: 1.2;
+  color: var(--texto);
+}
+
+/* El retículo solo existe cuando hay cuadrantes */
+#factores .factores__mira {
+  display: none;
+}
+
+/* ---------- Tablet y escritorio: retículo 2×2 ---------- */
+@media (min-width: 720px) {
+  #factores .factores__cuadrantes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr; /* filas iguales: el filete horizontal cae justo en el 50 % */
+  }
+
+  #factores .factores__cuadrante,
+  #factores .factores__cuadrante:first-child,
+  #factores .factores__cuadrante:last-child {
+    padding: var(--factores-hueco);
+    border-top: 0;
+  }
+
+  /* El contenido se alinea con los bordes del contenedor; el hueco queda solo junto a la cruz */
+  #factores .factores__cuadrante:nth-child(odd) {
+    padding-left: 0;
+  }
+
+  #factores .factores__cuadrante:nth-child(even) {
+    padding-right: 0;
+  }
+
+  #factores .factores__cuadrante:nth-child(-n + 2) {
+    padding-top: 0;
+  }
+
+  #factores .factores__cuadrante:nth-child(n + 3) {
+    padding-bottom: 0;
+  }
+
+  /* Cruz de filetes: se desvanece en los extremos y se abre alrededor de la «+» */
+  #factores .factores__panel::before,
+  #factores .factores__panel::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    background: var(--borde-fuerte);
+  }
+
+  #factores .factores__panel::before {
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 12%,
+      #000 calc(50% - var(--factores-claro)),
+      transparent calc(50% - var(--factores-claro)),
+      transparent calc(50% + var(--factores-claro)),
+      #000 calc(50% + var(--factores-claro)),
+      #000 88%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 12%,
+      #000 calc(50% - var(--factores-claro)),
+      transparent calc(50% - var(--factores-claro)),
+      transparent calc(50% + var(--factores-claro)),
+      #000 calc(50% + var(--factores-claro)),
+      #000 88%,
+      transparent 100%
+    );
+  }
+
+  #factores .factores__panel::after {
+    left: 0;
+    right: 0;
+    top: calc(50% - 0.5px);
+    height: 1px;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 8%,
+      #000 calc(50% - var(--factores-claro)),
+      transparent calc(50% - var(--factores-claro)),
+      transparent calc(50% + var(--factores-claro)),
+      #000 calc(50% + var(--factores-claro)),
+      #000 92%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 8%,
+      #000 calc(50% - var(--factores-claro)),
+      transparent calc(50% - var(--factores-claro)),
+      transparent calc(50% + var(--factores-claro)),
+      #000 calc(50% + var(--factores-claro)),
+      #000 92%,
+      transparent 100%
+    );
+  }
+
+  /* La «+» del centro de la mira */
+  #factores .factores__mira {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: 19px;
+    height: 19px;
+    translate: -50% -50%;
+    pointer-events: none;
+  }
+
+  #factores .factores__mira::before,
+  #factores .factores__mira::after {
+    content: '';
+    position: absolute;
+    background: var(--texto-2);
+  }
+
+  #factores .factores__mira::before {
+    left: 9px;
+    top: 0;
+    width: 1px;
+    height: 100%;
+  }
+
+  #factores .factores__mira::after {
+    top: 9px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+  }
+}
+
+@media (min-width: 1100px) {
+  #factores .factores__nombre {
+    font-size: clamp(var(--t-2xl), 1rem + 1.9vw, 2.75rem);
+  }
+}

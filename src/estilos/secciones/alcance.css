@@ -1,0 +1,158 @@
+/* ==========================================================================
+   2.5 Restricciones y alcance
+   A la izquierda, las restricciones como una lista de especificaciones con filetes.
+   A la derecha, lo excluido dentro de una zona rayada: la convención de plano técnico
+   para lo que no se fabrica. Su borde se traza una vez al entrar (ver alcance.js).
+   ========================================================================== */
+
+#alcance .alcance__cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
+/* El cuerpo arranca en la columna del titular (misma cuenta que .cabecera-seccion) */
+@media (min-width: 900px) {
+  #alcance .alcance__cuerpo {
+    padding-left: calc(max(7rem, (100% - var(--gutter)) / 6) + var(--gutter));
+  }
+}
+
+@media (min-width: 1100px) {
+  #alcance .alcance__cuerpo {
+    grid-template-columns: minmax(0, 5.5fr) minmax(0, 4.5fr);
+    column-gap: clamp(2.5rem, 1rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+}
+
+/* ---------- Restricciones ---------- */
+#alcance .alcance__subtitulo {
+  font-size: var(--t-xl);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 106;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+}
+
+#alcance .alcance__lista-restricciones {
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  border-bottom: 1px solid var(--borde-fuerte);
+}
+
+#alcance .alcance__restriccion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  padding-block: 1.4rem;
+  border-top: 1px solid var(--borde-fuerte);
+}
+
+@media (min-width: 600px) {
+  #alcance .alcance__restriccion {
+    grid-template-columns: minmax(8.5rem, 2fr) minmax(0, 5fr);
+    gap: var(--gutter);
+  }
+}
+
+#alcance .alcance__restriccion dt {
+  font-size: var(--t-l);
+  font-weight: 450;
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--texto);
+}
+
+#alcance .alcance__restriccion dd {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* ---------- Zona excluida ---------- */
+#alcance .alcance__excluido {
+  position: relative;
+  padding: clamp(1rem, 0.75rem + 1vw, 1.5rem);
+}
+
+/* Cuatro filos en lugar de un border: así el contorno se puede trazar lado a lado */
+#alcance .alcance__filo {
+  position: absolute;
+  background: var(--texto);
+}
+
+#alcance .alcance__filo--arriba {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+#alcance .alcance__filo--derecha {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+#alcance .alcance__filo--abajo {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+}
+
+#alcance .alcance__filo--izquierda {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+/* Rótulo y piezas apoyados sobre el rayado, con fondo propio para que el texto se lea limpio */
+#alcance .alcance__excluido-titulo {
+  display: inline-block;
+  padding: 0.55rem 0.9rem 0.6rem;
+  border: 1px solid var(--texto);
+  background: var(--fondo);
+  font-size: var(--t-l);
+  font-weight: 450;
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+
+#alcance .alcance__lista-excluida {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+#alcance .alcance__excluido-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--borde-fuerte);
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.45;
+}
+
+#alcance .alcance__aspa {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+}
+
+#alcance .alcance__aspa rect {
+  stroke: var(--texto-3);
+  stroke-width: 1;
+}

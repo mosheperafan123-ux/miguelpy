@@ -1,0 +1,14 @@
+# Dependencias (se reinstalan con npm ci)
+node_modules/
+
+# Sitio construido (lo genera GitHub Actions en cada publicación)
+dist/
+
+# Configuración local del editor y de Claude Code
+.claude/
+.vscode/
+
+# Sistema operativo y registros
+Thumbs.db
+.DS_Store
+*.log

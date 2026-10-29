@@ -1,0 +1,38 @@
+/* ==========================================================================
+   4 Referencias · lista APA con sangría francesa. Sin movimiento.
+   ========================================================================== */
+
+/* La lista arranca en la columna del titular (misma cuenta que .cabecera-seccion) */
+@media (min-width: 900px) {
+  #referencias .referencias__cuerpo {
+    padding-left: calc(max(7rem, (100% - var(--gutter)) / 6) + var(--gutter));
+  }
+}
+
+#referencias .referencias__lista {
+  max-width: 78ch;
+  border-bottom: 1px solid var(--borde);
+}
+
+/* Sangría francesa: la primera línea sale al margen y las siguientes quedan dentro */
+#referencias .referencias__item {
+  padding: 1.35rem 0 1.35rem 2.25rem;
+  border-top: 1px solid var(--borde);
+  text-indent: -2.25rem;
+  line-height: 1.6;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#referencias .referencias__enlace {
+  color: var(--texto);
+  overflow-wrap: anywhere;
+  text-decoration-color: var(--borde-fuerte);
+  transition: text-decoration-color var(--dur-ui) var(--ease-suave);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #referencias .referencias__enlace:hover {
+    text-decoration-color: currentColor;
+  }
+}

@@ -1,0 +1,538 @@
+/* ==========================================================================
+   2.1 Selección de la solución (placa oscura)
+   Matriz con medidores LED, podio escalonado y diagrama de integración.
+   ========================================================================== */
+
+#seleccion .seleccion__criterios {
+  margin-top: 1.5rem;
+}
+
+/* ---------- Matriz de decisión ---------- */
+#seleccion .seleccion__matriz {
+  margin: 0;
+}
+
+#seleccion .seleccion__desplazable {
+  --visor-color: var(--texto-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: clamp(0.75rem, 0.35rem + 1.6vw, 2rem);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  /* .visor pinta las esquinas con background; aquí solo se añade el color de fondo */
+  background-color: var(--superficie);
+  scrollbar-color: var(--borde-fuerte) transparent;
+  scrollbar-width: thin;
+}
+
+#seleccion .seleccion__tabla {
+  min-width: 44rem;
+  table-layout: fixed;
+  /* separate: con collapse los bordes no acompañan a la columna fija en móvil */
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#seleccion .seleccion__tabla caption {
+  padding-bottom: 1.25rem;
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__col-criterio {
+  width: 31%;
+}
+
+#seleccion .seleccion__col-tipo {
+  width: 11%;
+}
+
+#seleccion .seleccion__col-idea {
+  width: 19.33%;
+}
+
+#seleccion .seleccion__tabla th,
+#seleccion .seleccion__tabla td {
+  padding: 1rem 0.85rem;
+  vertical-align: middle;
+}
+
+#seleccion .seleccion__tabla thead th {
+  vertical-align: bottom;
+  padding-bottom: 1.1rem;
+}
+
+#seleccion .seleccion__idea-codigo {
+  display: block;
+  font-size: var(--t-xs);
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__idea-nombre {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--t-s);
+  font-weight: 500;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.3;
+  color: var(--texto-2);
+}
+
+/* Encabezados de fila: primera columna, fija al desplazar en móvil */
+#seleccion .seleccion__tabla th[scope='row'] {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--superficie);
+  font-size: var(--t-s);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--texto);
+  text-wrap: pretty;
+}
+
+#seleccion .seleccion__tabla thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--superficie);
+}
+
+#seleccion .seleccion__tipo {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  color: var(--texto-3);
+}
+
+/* Columna de la idea elegida: banda algo más alta y filete blanco arriba */
+#seleccion .seleccion__elegida {
+  background: color-mix(in srgb, var(--texto) 5%, var(--superficie));
+}
+
+#seleccion .seleccion__tabla thead .seleccion__elegida {
+  box-shadow: inset 0 2px 0 var(--texto);
+}
+
+#seleccion .seleccion__tabla thead .seleccion__elegida .seleccion__idea-codigo {
+  color: var(--texto-2);
+}
+
+#seleccion .seleccion__tabla thead .seleccion__elegida .seleccion__idea-nombre {
+  color: var(--texto);
+}
+
+#seleccion .seleccion__tabla tbody tr:last-child > * {
+  border-bottom-color: var(--borde-fuerte);
+}
+
+/* ---------- Medidor LED ---------- */
+#seleccion .seleccion__puntaje {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+#seleccion .seleccion__medidor {
+  --led: var(--texto-3);
+  display: inline-flex;
+  gap: 3px;
+}
+
+#seleccion .seleccion__elegida .seleccion__medidor {
+  --led: var(--texto);
+}
+
+#seleccion .seleccion__seg {
+  display: block;
+  width: 0.55rem;
+  height: 1.15rem;
+  border-radius: 1px;
+  /* LED apagado: se ve, pero tenue, para que la escala de cinco se lea completa */
+  background: color-mix(in srgb, var(--texto) 11%, transparent);
+}
+
+#seleccion .seleccion__seg--on {
+  background: var(--led);
+}
+
+#seleccion .seleccion__elegida .seleccion__seg--on {
+  box-shadow: 0 0 9px color-mix(in srgb, var(--blanco) 32%, transparent);
+}
+
+#seleccion .seleccion__digito {
+  min-width: 1ch;
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1.125rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-2);
+}
+
+#seleccion .seleccion__elegida .seleccion__digito {
+  color: var(--texto);
+}
+
+/* ---------- Fila de totales ---------- */
+#seleccion .seleccion__tabla tfoot th,
+#seleccion .seleccion__tabla tfoot td {
+  padding-top: 1.4rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 0;
+}
+
+#seleccion .seleccion__tabla tfoot th[scope='row'] {
+  font-weight: 560;
+}
+
+#seleccion .seleccion__total-nota {
+  font-weight: 400;
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__total {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  font-family: var(--fuente-matriz);
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__total-cifra {
+  display: inline-block;
+  font-weight: 750;
+  font-size: clamp(2.25rem, 1.6rem + 1.9vw, 3.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+#seleccion .seleccion__total-max {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__elegida .seleccion__total {
+  color: var(--texto);
+}
+
+#seleccion .seleccion__matriz .nota-fuente {
+  margin-top: 1rem;
+  max-width: 68ch;
+}
+
+@media (max-width: 899px) {
+  /* Columna fija más estrecha: deja ver al menos una idea completa al desplazar */
+  #seleccion .seleccion__tabla {
+    min-width: 38rem;
+  }
+
+  #seleccion .seleccion__col-criterio {
+    width: 27%;
+  }
+
+  #seleccion .seleccion__col-tipo {
+    width: 13%;
+  }
+
+  #seleccion .seleccion__col-idea {
+    width: 20%;
+  }
+
+  #seleccion .seleccion__tabla th,
+  #seleccion .seleccion__tabla td {
+    padding-inline: 0.65rem;
+  }
+
+  /* Borde que separa la columna fija del contenido que pasa por debajo */
+  #seleccion .seleccion__tabla th[scope='row'],
+  #seleccion .seleccion__tabla thead th:first-child {
+    box-shadow: 1px 0 0 var(--borde);
+  }
+}
+
+/* ---------- Podio ---------- */
+#seleccion .seleccion__podio-bloque {
+  margin-top: clamp(4.5rem, 3rem + 5vw, 8rem);
+}
+
+#seleccion .seleccion__podio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+#seleccion .seleccion__puesto {
+  display: flex;
+  flex-direction: column;
+}
+
+#seleccion .seleccion__placa {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.25rem, 0.9rem + 1.2vw, 2rem);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+}
+
+/* El primer puesto es la única placa iluminada: blanco sobre negro, como la columna elegida */
+#seleccion .seleccion__puesto--1 .seleccion__placa {
+  --texto: var(--negro);
+  --texto-2: var(--tinta-2);
+  --texto-3: var(--tinta-3);
+  --borde: var(--linea-clara);
+  background: var(--blanco);
+  border-color: var(--blanco);
+  color: var(--texto);
+}
+
+#seleccion .seleccion__puesto-numero {
+  display: flex;
+  align-items: baseline;
+  font-family: var(--fuente-matriz);
+  font-weight: 750;
+  font-size: var(--t-cifra);
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+#seleccion .seleccion__ordinal {
+  margin-left: 0.08em;
+  font-size: max(1.25rem, 0.32em);
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+#seleccion .seleccion__puesto-idea {
+  margin-top: 0.5rem;
+  font-size: var(--t-l);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 106;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+#seleccion .seleccion__puesto-codigo {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#seleccion .seleccion__puesto-razon {
+  max-width: 38ch;
+  font-size: var(--t-s);
+  line-height: 1.55;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#seleccion .seleccion__puesto-puntaje {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+#seleccion .seleccion__puesto-cifra {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1.375rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+#seleccion .seleccion__puesto-max {
+  font-size: 1rem;
+  color: var(--texto-3);
+}
+
+@media (min-width: 900px) {
+  /* Peldaños: las placas comparten la base y la altura cae con el puesto */
+  #seleccion .seleccion__podio {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: var(--gutter);
+    margin-top: 2.5rem;
+    border-bottom: 1px solid var(--borde-fuerte);
+  }
+
+  #seleccion .seleccion__placa {
+    border-bottom: 0;
+    border-radius: var(--radio) var(--radio) 0 0;
+  }
+
+  #seleccion .seleccion__puesto--1 {
+    order: 2;
+  }
+
+  #seleccion .seleccion__puesto--2 {
+    order: 1;
+    margin-top: clamp(2.5rem, 1rem + 2.6vw, 4rem);
+  }
+
+  #seleccion .seleccion__puesto--3 {
+    order: 3;
+    margin-top: clamp(4.5rem, 2rem + 4.4vw, 7rem);
+  }
+}
+
+/* ---------- Integración ---------- */
+#seleccion .seleccion__integracion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem var(--gutter);
+  margin: clamp(4.5rem, 3rem + 5vw, 8rem) 0 0;
+}
+
+#seleccion .seleccion__integracion-texto p {
+  margin-top: 1rem;
+  max-width: 44ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#seleccion .seleccion__diagrama {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+#seleccion .seleccion__diagrama--horizontal {
+  display: none;
+}
+
+#seleccion .seleccion__diagrama--vertical {
+  max-width: 28rem;
+}
+
+@media (min-width: 900px) {
+  #seleccion .seleccion__diagrama--horizontal {
+    display: block;
+    max-width: 60rem;
+  }
+
+  #seleccion .seleccion__diagrama--vertical {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  #seleccion .seleccion__integracion {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+  }
+
+  #seleccion .seleccion__integracion-texto {
+    grid-column: 1 / span 3;
+  }
+
+  #seleccion .seleccion__diagramas {
+    grid-column: 4 / -1;
+  }
+}
+
+/* Piezas del diagrama: colores siempre por variables de contexto */
+#seleccion .seleccion__nodo {
+  fill: var(--superficie);
+  stroke: var(--borde-fuerte);
+  stroke-width: 1;
+}
+
+#seleccion .seleccion__nodo--nucleo {
+  fill: var(--superficie-alta);
+  stroke: var(--texto);
+  stroke-width: 1.5;
+}
+
+#seleccion .seleccion__traza {
+  fill: none;
+  stroke: var(--texto-3);
+  stroke-width: 1.5;
+  stroke-linejoin: miter;
+}
+
+#seleccion .seleccion__traza--salida {
+  stroke: var(--texto);
+}
+
+#seleccion .seleccion__flecha,
+#seleccion .seleccion__pin {
+  fill: var(--texto);
+}
+
+#seleccion .seleccion__via {
+  fill: var(--fondo);
+  stroke: var(--texto-2);
+  stroke-width: 1.5;
+}
+
+#seleccion .seleccion__esquinas {
+  fill: none;
+  stroke: var(--texto);
+  stroke-width: 1.5;
+}
+
+#seleccion .seleccion__salida-relleno {
+  fill: var(--texto);
+}
+
+#seleccion .seleccion__salida-marco {
+  fill: none;
+  stroke: var(--texto);
+  stroke-width: 1.5;
+}
+
+#seleccion .seleccion__diagrama text {
+  font-family: var(--fuente);
+}
+
+#seleccion .seleccion__svg-etiqueta,
+#seleccion .seleccion__svg-flujo {
+  font-size: 14px;
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  fill: var(--texto-3);
+}
+
+#seleccion .seleccion__svg-flujo {
+  fill: var(--texto-2);
+}
+
+#seleccion .seleccion__svg-nombre {
+  font-size: 18px;
+  font-weight: 420;
+  font-variation-settings: 'wdth' 100;
+  fill: var(--texto);
+}
+
+#seleccion .seleccion__svg-nombre--nucleo {
+  font-size: 20px;
+  font-weight: 500;
+  font-variation-settings: 'wdth' 104;
+}
+
+#seleccion .seleccion__svg-salida {
+  font-size: 18px;
+  font-weight: 600;
+  font-variation-settings: 'wdth' 100;
+  fill: var(--fondo);
+}

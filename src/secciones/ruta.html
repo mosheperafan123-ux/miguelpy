@@ -1,0 +1,637 @@
+<section id="ruta" class="seccion" data-capitulo="3" data-titulo-corto="Hoja de ruta" aria-labelledby="ruta-titulo">
+  <div class="contenedor">
+    <header class="cabecera-seccion">
+      <p class="ref-capitulo">3<span>Gestión y hoja de ruta técnica</span></p>
+      <div>
+        <h2 class="titulo-seccion" id="ruta-titulo" data-extender>Dieciséis semanas, cinco etapas, catorce actividades</h2>
+        <p class="entradilla">
+          <span class="ruta-rotulo">Objetivo general:</span> Diseñar un prototipo de sistema de datos que centralice la
+          información de oferta y demanda de ayuda humanitaria en Cali, cruzando las donaciones disponibles con las
+          necesidades de cada sector, para que las donaciones lleguen a quienes más las necesitan.
+        </p>
+      </div>
+    </header>
+
+    <!-- 3.1 Matriz de alineación -->
+    <section class="ruta-bloque ruta-bloque--primero" id="ruta-alineacion">
+      <header class="ruta-subcabecera">
+        <p class="ruta-subcabecera__ref">3.1</p>
+        <div>
+          <h3 class="subtitulo" id="ruta-alineacion-titulo">Matriz de alineación</h3>
+          <p class="ruta-subcabecera__texto">
+            A partir de este objetivo general, cada objetivo específico, redactado con verbo en infinitivo, se vincula
+            con un resultado tangible, la actividad que lo produce y su responsable.
+          </p>
+        </div>
+      </header>
+
+      <table class="tabla ruta-matriz" role="table">
+        <caption class="solo-lector">
+          Matriz de alineación: cada objetivo específico con su resultado tangible, sus actividades y sus responsables
+        </caption>
+        <colgroup>
+          <col class="ruta-matriz__col-codigo" />
+          <col class="ruta-matriz__col-objetivo" />
+          <col class="ruta-matriz__col-resultado" />
+          <col class="ruta-matriz__col-actividades" />
+          <col class="ruta-matriz__col-responsable" />
+        </colgroup>
+        <thead role="rowgroup">
+          <tr role="row">
+            <th scope="col" role="columnheader">N.°</th>
+            <th scope="col" role="columnheader">Objetivo específico</th>
+            <th scope="col" role="columnheader">Resultado tangible</th>
+            <th scope="col" role="columnheader">Actividades</th>
+            <th scope="col" role="columnheader">Responsable</th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE1</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Definir las variables y el modelo de datos de oferta y demanda, junto con la regla de puntaje.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">
+              Documento de requerimientos, modelo de datos y fórmula de puntaje
+            </td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A1</li>
+                <li class="chip">A2</li>
+                <li class="chip">A3</li>
+                <li class="chip">A4</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip"><abbr class="ruta-abbr" title="Sebastian Ledesma">SL</abbr></li>
+                <li class="chip"><abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr></li>
+              </ul>
+            </td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE2</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Registrar las donaciones disponibles por tipo, cantidad, vencimiento y ubicación.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">Hoja de registro de donaciones</td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A5</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip"><abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr></li>
+              </ul>
+            </td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE3</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Recoger las necesidades reportadas por comuna y su nivel de urgencia.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">
+              Formulario y hoja de necesidades, con datos de prueba
+            </td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A6</li>
+                <li class="chip">A7</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip"><abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr></li>
+                <li class="chip"><abbr class="ruta-abbr" title="Miguel Ángel Noreña">MN</abbr></li>
+              </ul>
+            </td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE4</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Programar un algoritmo que cruce oferta y demanda y recomiende la distribución.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">
+              Módulo de cruce con ranking de prioridad calibrado
+            </td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A8</li>
+                <li class="chip">A10</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip"><abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr></li>
+              </ul>
+            </td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE5</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Visualizar los sectores con mayor déficit mediante gráficos accesibles.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">Panel de gráficos de déficit</td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A9</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip"><abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr></li>
+              </ul>
+            </td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="ruta-matriz__codigo">OE6</span></th>
+            <td role="cell" class="ruta-matriz__objetivo" data-etiqueta="Objetivo específico">
+              Validar el prototipo con usuarios y documentar su uso.
+            </td>
+            <td role="cell" class="ruta-matriz__resultado" data-etiqueta="Resultado tangible">
+              Informe de validación, manual de uso y sustentación
+            </td>
+            <td role="cell" data-etiqueta="Actividades">
+              <ul class="ruta-chips" role="list">
+                <li class="chip">A11</li>
+                <li class="chip">A12</li>
+                <li class="chip">A13</li>
+                <li class="chip">A14</li>
+              </ul>
+            </td>
+            <td role="cell" data-etiqueta="Responsable">
+              <ul class="ruta-chips" role="list">
+                <li class="chip ruta-chip--palabra">Todos</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- 3.2 Metodología y etapas: en escritorio, la pista se desplaza en horizontal mientras un lote recorre la cinta -->
+  <section class="ruta-bloque ruta-etapas" id="ruta-etapas">
+    <div class="contenedor">
+      <header class="ruta-subcabecera">
+        <p class="ruta-subcabecera__ref">3.2</p>
+        <div>
+          <h3 class="subtitulo" id="ruta-etapas-titulo">Metodología y etapas</h3>
+          <p class="ruta-subcabecera__texto">
+            El trabajo sigue la lógica de Design Thinking. Las fases de empatizar, definir e idear ya se completaron en
+            los avances anteriores; la ejecución se concentra en prototipar y probar, organizada en cinco etapas
+            secuenciales, cada una cerrada con un entregable.
+          </p>
+        </div>
+      </header>
+    </div>
+
+    <figure class="ruta-etapas__figura">
+      <div class="ruta-etapas__escenario">
+        <ol class="ruta-etapas__pista" role="list" aria-label="Etapas del proyecto">
+          <li class="ruta-etapa" style="--tono: var(--etapa-1)">
+            <div class="ruta-etapa__placa">
+              <span class="ruta-etapa__mira visor" aria-hidden="true"></span>
+              <div class="ruta-etapa__cabeza">
+                <h4 class="ruta-etapa__titulo">
+                  <span class="ruta-etapa__codigo">E1</span>
+                  <span class="ruta-etapa__nombre">Planeación y requerimientos</span>
+                </h4>
+                <div class="cota ruta-etapa__cota"><span class="cota__texto">Semanas 1–3</span></div>
+              </div>
+              <p class="ruta-etapa__texto">
+                Se consolida el diagnóstico, se definen las variables y se gestiona el acceso a datos con las
+                organizaciones.
+              </p>
+              <div class="ruta-etapa__actividades">
+                <p class="etiqueta">Actividades</p>
+                <ul role="list">
+                  <li><span class="ruta-etapa__id">A1</span><span>Consolidar diagnóstico y requerimientos</span></li>
+                  <li><span class="ruta-etapa__id">A2</span><span>Definir variables de oferta y demanda</span></li>
+                  <li><span class="ruta-etapa__id">A3</span><span>Contactar fundaciones y líderes</span></li>
+                </ul>
+              </div>
+              <p class="ruta-etapa__entregable">
+                <span class="ruta-etapa__rotulo">Entregable:</span> Documento de requerimientos y variables
+              </p>
+            </div>
+          </li>
+
+          <li class="ruta-etapa" style="--tono: var(--etapa-2)">
+            <div class="ruta-etapa__placa">
+              <span class="ruta-etapa__mira visor" aria-hidden="true"></span>
+              <div class="ruta-etapa__cabeza">
+                <h4 class="ruta-etapa__titulo">
+                  <span class="ruta-etapa__codigo">E2</span>
+                  <span class="ruta-etapa__nombre">Diseño de datos y algoritmo</span>
+                </h4>
+                <div class="cota ruta-etapa__cota"><span class="cota__texto">Semanas 4–5</span></div>
+              </div>
+              <p class="ruta-etapa__texto">Se define el modelo de datos y la regla de puntaje.</p>
+              <div class="ruta-etapa__actividades">
+                <p class="etiqueta">Actividades</p>
+                <ul role="list">
+                  <li><span class="ruta-etapa__id">A4</span><span>Diseñar modelo de datos y regla de puntaje</span></li>
+                </ul>
+              </div>
+              <p class="ruta-etapa__entregable">
+                <span class="ruta-etapa__rotulo">Entregable:</span> Modelo de datos y fórmula de puntaje
+              </p>
+            </div>
+          </li>
+
+          <li class="ruta-etapa" style="--tono: var(--etapa-3)">
+            <div class="ruta-etapa__placa">
+              <span class="ruta-etapa__mira visor" aria-hidden="true"></span>
+              <div class="ruta-etapa__cabeza">
+                <h4 class="ruta-etapa__titulo">
+                  <span class="ruta-etapa__codigo">E3</span>
+                  <span class="ruta-etapa__nombre">Construcción del prototipo</span>
+                </h4>
+                <div class="cota ruta-etapa__cota"><span class="cota__texto">Semanas 6–12</span></div>
+              </div>
+              <p class="ruta-etapa__texto">
+                Se construyen las hojas de donaciones y necesidades, el algoritmo, el panel de gráficos y se calibran
+                los pesos.
+              </p>
+              <div class="ruta-etapa__actividades">
+                <p class="etiqueta">Actividades</p>
+                <ul role="list">
+                  <li><span class="ruta-etapa__id">A5</span><span>Hoja de donaciones</span></li>
+                  <li><span class="ruta-etapa__id">A6</span><span>Registro de necesidades (Forms + hoja)</span></li>
+                  <li><span class="ruta-etapa__id">A7</span><span>Recolección de datos de prueba</span></li>
+                  <li><span class="ruta-etapa__id">A8</span><span>Algoritmo de cruce</span></li>
+                  <li><span class="ruta-etapa__id">A9</span><span>Panel de gráficos de déficit</span></li>
+                  <li><span class="ruta-etapa__id">A10</span><span>Calibración del algoritmo</span></li>
+                </ul>
+              </div>
+              <p class="ruta-etapa__entregable">
+                <span class="ruta-etapa__rotulo">Entregable:</span> Prototipo funcional en Excel/Sheets
+              </p>
+            </div>
+          </li>
+
+          <li class="ruta-etapa" style="--tono: var(--etapa-4)">
+            <div class="ruta-etapa__placa">
+              <span class="ruta-etapa__mira visor" aria-hidden="true"></span>
+              <div class="ruta-etapa__cabeza">
+                <h4 class="ruta-etapa__titulo">
+                  <span class="ruta-etapa__codigo">E4</span>
+                  <span class="ruta-etapa__nombre">Pruebas y validación</span>
+                </h4>
+                <div class="cota ruta-etapa__cota"><span class="cota__texto">Semanas 13–14</span></div>
+              </div>
+              <p class="ruta-etapa__texto">
+                Se prueba con usuarios reales, se ajusta y se verifica el cumplimiento de la Ley 1581 y la
+                accesibilidad.
+              </p>
+              <div class="ruta-etapa__actividades">
+                <p class="etiqueta">Actividades</p>
+                <ul role="list">
+                  <li><span class="ruta-etapa__id">A11</span><span>Pruebas con usuarios y ajustes</span></li>
+                  <li><span class="ruta-etapa__id">A12</span><span>Verificar Ley 1581 y accesibilidad</span></li>
+                </ul>
+              </div>
+              <p class="ruta-etapa__entregable">
+                <span class="ruta-etapa__rotulo">Entregable:</span> Informe de validación
+              </p>
+            </div>
+          </li>
+
+          <li class="ruta-etapa" style="--tono: var(--etapa-5)">
+            <div class="ruta-etapa__placa">
+              <span class="ruta-etapa__mira visor" aria-hidden="true"></span>
+              <div class="ruta-etapa__cabeza">
+                <h4 class="ruta-etapa__titulo">
+                  <span class="ruta-etapa__codigo">E5</span>
+                  <span class="ruta-etapa__nombre">Cierre y sustentación</span>
+                </h4>
+                <div class="cota ruta-etapa__cota"><span class="cota__texto">Semanas 14–16</span></div>
+              </div>
+              <p class="ruta-etapa__texto">Se entrega la documentación final, el manual y la sustentación.</p>
+              <div class="ruta-etapa__actividades">
+                <p class="etiqueta">Actividades</p>
+                <ul role="list">
+                  <li><span class="ruta-etapa__id">A13</span><span>Documentación final y manual</span></li>
+                  <li><span class="ruta-etapa__id">A14</span><span>Preparar y realizar sustentación</span></li>
+                </ul>
+              </div>
+              <p class="ruta-etapa__entregable">
+                <span class="ruta-etapa__rotulo">Entregable:</span> Informe final, manual y presentación
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <!-- Cinta transportadora: solo se muestra con la pista anclada. Es decorativa: el dato está en los paneles. -->
+        <div class="ruta-cinta" aria-hidden="true" style="--semanas: 16">
+          <div class="ruta-cinta__lectura">
+            <span class="ruta-cinta__rotulo">Semana</span>
+            <span class="ruta-cinta__semana">1</span>
+            <span class="ruta-cinta__rotulo">de 16</span>
+            <span class="ruta-cinta__etapa">
+              <span class="ruta-cinta__codigo">E1</span>
+              <span class="ruta-cinta__nombre">Planeación</span>
+            </span>
+          </div>
+          <div class="ruta-cinta__via">
+            <div class="ruta-cinta__carro"><span class="ruta-cinta__lote"></span></div>
+            <div class="ruta-cinta__correa">
+              <div class="ruta-cinta__superficie"><span class="ruta-cinta__textura"></span></div>
+              <div class="ruta-cinta__rodillos">
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span><span class="ruta-cinta__rodillo"></span>
+                <span class="ruta-cinta__rodillo"></span>
+              </div>
+            </div>
+          </div>
+          <div class="ruta-cinta__semanas">
+            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+            <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
+          </div>
+          <div class="ruta-cinta__tramos">
+            <span class="ruta-cinta__tramo" style="--tono: var(--etapa-1); grid-column: 1 / 4; grid-row: 1"></span>
+            <span class="ruta-cinta__tramo" style="--tono: var(--etapa-2); grid-column: 4 / 6; grid-row: 2"></span>
+            <span class="ruta-cinta__tramo" style="--tono: var(--etapa-3); grid-column: 6 / 13; grid-row: 1"></span>
+            <span class="ruta-cinta__tramo" style="--tono: var(--etapa-4); grid-column: 13 / 15; grid-row: 2"></span>
+            <span class="ruta-cinta__tramo" style="--tono: var(--etapa-5); grid-column: 14 / 17; grid-row: 1"></span>
+          </div>
+        </div>
+      </div>
+      <figcaption class="contenedor nota-fuente">
+        Figura 1. Diagrama de actividades por etapa y entregable. Fuente: elaboración propia.
+      </figcaption>
+    </figure>
+  </section>
+
+  <div class="contenedor">
+    <!-- 3.3 Cronograma de ejecución (Gantt) -->
+    <section class="ruta-bloque" id="ruta-cronograma">
+      <header class="ruta-subcabecera">
+        <p class="ruta-subcabecera__ref">3.3</p>
+        <div>
+          <h3 class="subtitulo" id="ruta-cronograma-titulo">Cronograma de ejecución</h3>
+          <p class="ruta-subcabecera__texto">
+            Las columnas «Precede» indican las actividades que deben concluir (o avanzar de forma suficiente) antes de
+            iniciar cada una.
+          </p>
+          <p class="etiqueta ruta-claves__titulo">Responsables</p>
+          <dl class="ruta-claves">
+            <div><dt>SL</dt><dd>Sebastian Ledesma</dd></div>
+            <div><dt>MN</dt><dd>Miguel Ángel Noreña</dd></div>
+            <div><dt>SN</dt><dd>Sebastian Nempeque</dd></div>
+            <div><dt>JL</dt><dd>Juan Esteban Luna</dd></div>
+          </dl>
+        </div>
+      </header>
+
+      <figure class="ruta-gantt" style="--semanas: 16">
+        <ul class="ruta-gantt__leyenda" role="list" aria-label="Etapas del cronograma">
+          <li style="--tono: var(--etapa-1)">
+            <span class="ruta-gantt__muestra" aria-hidden="true"></span><span class="ruta-gantt__codigo">E1</span>
+            Planeación, semanas 1–3
+          </li>
+          <li style="--tono: var(--etapa-2)">
+            <span class="ruta-gantt__muestra" aria-hidden="true"></span><span class="ruta-gantt__codigo">E2</span>
+            Diseño, semanas 4–5
+          </li>
+          <li style="--tono: var(--etapa-3)">
+            <span class="ruta-gantt__muestra" aria-hidden="true"></span><span class="ruta-gantt__codigo">E3</span>
+            Construcción, semanas 6–12
+          </li>
+          <li style="--tono: var(--etapa-4)">
+            <span class="ruta-gantt__muestra" aria-hidden="true"></span><span class="ruta-gantt__codigo">E4</span>
+            Pruebas, semanas 13–14
+          </li>
+          <li style="--tono: var(--etapa-5)">
+            <span class="ruta-gantt__muestra" aria-hidden="true"></span><span class="ruta-gantt__codigo">E5</span>
+            Cierre, semanas 14–16
+          </li>
+        </ul>
+
+        <div class="ruta-gantt__marco" tabindex="0" role="region" aria-label="Cronograma de ejecución, desplazable en horizontal">
+          <div class="ruta-gantt__lienzo">
+            <table class="tabla ruta-gantt__tabla">
+              <caption class="solo-lector">
+                Cronograma de ejecución de 16 semanas: actividad, responsables, actividades que la preceden y semanas
+                en que se ejecuta
+              </caption>
+              <colgroup>
+                <col class="ruta-gantt__col-id" />
+                <col class="ruta-gantt__col-actividad" />
+                <col class="ruta-gantt__col-resp" />
+                <col class="ruta-gantt__col-precede" />
+                <col class="ruta-gantt__col-semanas" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Actividad</th>
+                  <th scope="col">Resp.</th>
+                  <th scope="col">Precede</th>
+                  <th scope="col" class="ruta-gantt__th-semanas">
+                    <span class="solo-lector">Semanas</span>
+                    <div class="cota ruta-gantt__cota" aria-hidden="true"><span class="cota__texto">16 semanas</span></div>
+                    <div class="ruta-gantt__regla" aria-hidden="true">
+                      <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+                      <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-actividad="A1" style="--tono: var(--etapa-1)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A1</span></th>
+                  <td>Consolidar diagnóstico y requerimientos</td>
+                  <td><abbr class="ruta-abbr" title="Sebastian Ledesma">SL</abbr></td>
+                  <td><span aria-hidden="true">—</span><span class="solo-lector">Ninguna</span></td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 1 / 3"><span class="solo-lector">Semanas 1 a 2</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A2" style="--tono: var(--etapa-1)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A2</span></th>
+                  <td>Definir variables de oferta y demanda</td>
+                  <td><abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr></td>
+                  <td>A1</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 2 / 4"><span class="solo-lector">Semanas 2 a 3</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A3" style="--tono: var(--etapa-1)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A3</span></th>
+                  <td>Contactar fundaciones y líderes; acordar acceso a datos</td>
+                  <td><abbr class="ruta-abbr" title="Miguel Ángel Noreña">MN</abbr></td>
+                  <td><span aria-hidden="true">—</span><span class="solo-lector">Ninguna</span></td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 1 / 4"><span class="solo-lector">Semanas 1 a 3</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A4" style="--tono: var(--etapa-2)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A4</span></th>
+                  <td>Diseñar modelo de datos y regla de puntaje</td>
+                  <td>
+                    <abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr>,
+                    <abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr>
+                  </td>
+                  <td>A2, A3</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 4 / 6"><span class="solo-lector">Semanas 4 a 5</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A5" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A5</span></th>
+                  <td>Construir hoja de registro de donaciones</td>
+                  <td><abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr></td>
+                  <td>A4</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 6 / 8"><span class="solo-lector">Semanas 6 a 7</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A6" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A6</span></th>
+                  <td>Construir registro de necesidades por sector (Forms + hoja)</td>
+                  <td>
+                    <abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr>,
+                    <abbr class="ruta-abbr" title="Miguel Ángel Noreña">MN</abbr>
+                  </td>
+                  <td>A4</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 6 / 9"><span class="solo-lector">Semanas 6 a 8</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A7" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A7</span></th>
+                  <td>Recolectar datos de prueba por comuna</td>
+                  <td><abbr class="ruta-abbr" title="Miguel Ángel Noreña">MN</abbr></td>
+                  <td>A3, A4</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 6 / 10"><span class="solo-lector">Semanas 6 a 9</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A8" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A8</span></th>
+                  <td>Programar algoritmo de cruce oferta-demanda</td>
+                  <td><abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr></td>
+                  <td>A5, A6</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 8 / 11"><span class="solo-lector">Semanas 8 a 10</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A9" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A9</span></th>
+                  <td>Elaborar panel de gráficos de déficit</td>
+                  <td><abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr></td>
+                  <td>A8</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 11 / 13"><span class="solo-lector">Semanas 11 a 12</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A10" style="--tono: var(--etapa-3)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A10</span></th>
+                  <td>Calibrar pesos del algoritmo con datos de prueba</td>
+                  <td>
+                    <abbr class="ruta-abbr" title="Sebastian Nempeque">SN</abbr>,
+                    <abbr class="ruta-abbr" title="Miguel Ángel Noreña">MN</abbr>
+                  </td>
+                  <td>A7, A8</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 11 / 13"><span class="solo-lector">Semanas 11 a 12</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A11" style="--tono: var(--etapa-4)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A11</span></th>
+                  <td>Realizar pruebas con usuarios y ajustes</td>
+                  <td>Todos</td>
+                  <td>A9, A10</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 13 / 15"><span class="solo-lector">Semanas 13 a 14</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A12" style="--tono: var(--etapa-4)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A12</span></th>
+                  <td>Verificar cumplimiento Ley 1581 y accesibilidad</td>
+                  <td><abbr class="ruta-abbr" title="Sebastian Ledesma">SL</abbr></td>
+                  <td>A9</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 13 / 15"><span class="solo-lector">Semanas 13 a 14</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A13" style="--tono: var(--etapa-5)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A13</span></th>
+                  <td>Elaborar documentación final y manual de uso</td>
+                  <td>
+                    <abbr class="ruta-abbr" title="Sebastian Ledesma">SL</abbr>,
+                    <abbr class="ruta-abbr" title="Juan Esteban Luna">JL</abbr>
+                  </td>
+                  <td>A11</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 14 / 16"><span class="solo-lector">Semanas 14 a 15</span></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr data-actividad="A14" style="--tono: var(--etapa-5)">
+                  <th scope="row"><span class="ruta-gantt__codigo">A14</span></th>
+                  <td>Preparar y realizar la sustentación</td>
+                  <td>Todos</td>
+                  <td>A12, A13</td>
+                  <td class="ruta-gantt__celda">
+                    <div class="ruta-gantt__pista">
+                      <span class="ruta-gantt__barra" style="grid-column: 15 / 17"><span class="solo-lector">Semanas 15 a 16</span></span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- Dependencias: los conectores se calculan en JS desde la posición real de cada barra -->
+            <svg class="ruta-gantt__dependencias" viewBox="0 0 880 640" aria-hidden="true" focusable="false"></svg>
+          </div>
+        </div>
+
+        <div class="ruta-gantt__lectura" hidden>
+          <p class="ruta-gantt__ayuda">
+            Al pasar el cursor por una actividad, o al enfocarla con el teclado, aquí se lee de qué depende y qué
+            habilita.
+          </p>
+          <p class="ruta-gantt__dato" aria-live="polite"></p>
+        </div>
+
+        <figcaption class="nota-fuente">
+          Tabla. Diagrama de Gantt por semanas. Los tonos corresponden a las etapas E1 a E5. Fuente: elaboración propia.
+        </figcaption>
+      </figure>
+    </section>
+  </div>
+</section>

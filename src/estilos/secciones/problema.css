@@ -1,0 +1,352 @@
+/* ==========================================================================
+   1.1 Diagnóstico inicial
+   Apertura con el resumen ejecutivo y cuatro «lecturas de instrumento».
+   ========================================================================== */
+
+/* ---------- Apertura ---------- */
+#problema .problema__apertura {
+  row-gap: 2.5rem;
+  align-items: start;
+}
+
+#problema .problema__resumen,
+#problema .problema__contexto {
+  grid-column: 1 / -1;
+}
+
+#problema .problema__resumen {
+  max-width: 32ch;
+  font-size: clamp(1.375rem, 1.05rem + 1.1vw, var(--t-xl));
+  font-weight: 300;
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.32;
+  letter-spacing: -0.012em;
+  color: var(--texto);
+  text-wrap: pretty;
+}
+
+#problema .problema__contexto {
+  max-width: 60ch;
+  font-size: var(--t-s);
+}
+
+#problema .problema__contexto p {
+  line-height: 1.62;
+}
+
+#problema .problema__cita {
+  color: var(--texto-3);
+}
+
+@media (min-width: 900px) {
+  #problema .problema__resumen {
+    grid-column: 1 / span 7;
+  }
+
+  #problema .problema__contexto {
+    grid-column: 9 / -1;
+    padding-left: var(--gutter);
+    border-left: 1px solid var(--borde);
+  }
+}
+
+@media (min-width: 1200px) {
+  #problema .problema__resumen {
+    grid-column: 3 / span 6;
+  }
+
+  #problema .problema__contexto {
+    grid-column: 10 / -1;
+  }
+}
+
+/* ---------- Panel de lecturas ----------
+   Los filetes salen del fondo de la rejilla asomando por un hueco de 1px,
+   así sirven igual con 1, 2 o 4 columnas. */
+#problema .problema__patrones {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  margin-top: clamp(4rem, 2.5rem + 5vw, 7.5rem);
+  background: var(--borde);
+  border-block: 1px solid var(--borde);
+}
+
+@media (min-width: 640px) {
+  #problema .problema__patrones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  #problema .problema__patrones {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+#problema .problema__patron {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem) clamp(1rem, 0.5rem + 1.4vw, 1.75rem) clamp(1.75rem, 1rem + 2vw, 2.75rem);
+  background: var(--fondo);
+}
+
+#problema .problema__visor {
+  --visor-color: var(--borde-fuerte);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 8 / 5;
+  padding: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+#problema .problema__patron-titulo {
+  max-width: 22ch;
+  font-size: var(--t-l);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.25;
+  letter-spacing: -0.006em;
+  text-wrap: balance;
+}
+
+#problema .problema__patron-detalle {
+  max-width: 34ch;
+  margin-top: 0.75rem;
+  font-size: var(--t-s);
+  line-height: 1.55;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* ---------- Pictogramas ----------
+   viewBox de 160 de ancho dibujado a 240px como máximo: un trazo de 1 unidad ≈ 1,5px. */
+#problema .problema__picto {
+  width: min(100%, 15rem);
+  height: auto;
+  overflow: visible;
+  color: var(--texto-2);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#problema .problema__tenue {
+  stroke: var(--texto-3);
+}
+
+#problema .problema__fuerte {
+  stroke: var(--texto);
+}
+
+#problema .problema__relleno,
+#problema .problema__punto,
+#problema .problema__pivote {
+  fill: var(--texto);
+  stroke: none;
+}
+
+/* La fuente común que no existe: un contorno discontinuo */
+#problema .problema__hub {
+  stroke: var(--texto-3);
+  stroke-dasharray: 2 2;
+}
+
+/* El tramo que falta: punteado tenue en reposo; en el bucle «intenta» cerrarse */
+#problema .problema__hueco {
+  stroke: var(--texto);
+  stroke-dasharray: 0.01 2.4;
+  opacity: 0.4;
+}
+
+#problema .problema__barra {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* Escritura a mano: pathLength="1" normaliza el trazo (1 = trazo entero) */
+#problema .problema__mano {
+  stroke: var(--texto-2);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+#problema .problema__mano.problema__tachado {
+  stroke: var(--texto);
+}
+
+#problema .problema__punto {
+  opacity: 0.5;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ---------- Bucles ----------
+   Solo corren cuando el JS marca la lectura como viva (tras dibujarse) y nunca con
+   movimiento reducido; en reposo todo queda en su estado completo. */
+#problema .problema__patron[data-vivo] .problema__hueco {
+  animation: problema-intento 3.4s var(--ease-suave) var(--retraso, 0s) infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__barra {
+  animation: problema-nivel var(--ciclo, 3.6s) var(--ease-suave) var(--retraso, 0s) infinite alternate;
+}
+
+#problema .problema__patron[data-vivo] .problema__mano--1 {
+  animation: problema-mano-1 9s ease-in-out infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__mano--2 {
+  animation: problema-mano-2 9s ease-in-out infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__mano--3 {
+  animation: problema-mano-3 9s ease-in-out infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__mano.problema__tachado {
+  animation: problema-tachado 9s ease-in-out infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__mano--4 {
+  animation: problema-mano-4 9s ease-in-out infinite;
+}
+
+#problema .problema__patron[data-vivo] .problema__punto {
+  animation: problema-escribiendo 1.3s var(--ease-suave) var(--retraso, 0s) infinite;
+}
+
+@keyframes problema-intento {
+  0%,
+  54%,
+  100% {
+    opacity: 0.4;
+  }
+  57% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.2;
+  }
+  63% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes problema-nivel {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(var(--nivel, 0.9));
+  }
+}
+
+/* Lista: se escriben cuatro renglones, el tercero se tacha, todo se borra y vuelve a empezar */
+@keyframes problema-mano-1 {
+  0%,
+  4% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  16%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes problema-mano-2 {
+  0%,
+  18% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  28%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes problema-mano-3 {
+  0%,
+  30% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  42%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes problema-tachado {
+  0%,
+  46% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  50%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes problema-mano-4 {
+  0%,
+  54% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  64%,
+  86% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes problema-escribiendo {
+  0%,
+  60%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

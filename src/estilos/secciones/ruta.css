@@ -1,0 +1,867 @@
+/* ==========================================================================
+   3 · Gestión y hoja de ruta técnica
+   3.1 matriz de alineación · 3.2 etapas (pista horizontal + cinta) · 3.3 Gantt
+   ========================================================================== */
+
+#ruta {
+  /* Borde izquierdo de .contenedor, para alinear lo que sale a sangre completa */
+  --ruta-alineacion: max(var(--margen), calc((100% - var(--ancho)) / 2));
+  --ruta-hueco: clamp(3rem, 1.5rem + 3vw, 5.5rem);
+}
+
+#ruta .ruta-rotulo {
+  color: var(--texto);
+  font-weight: 520;
+}
+
+/* ---------- Bloques y subcabeceras ---------- */
+#ruta .ruta-bloque {
+  margin-top: clamp(5rem, 3rem + 6vw, 9.5rem);
+}
+
+#ruta .ruta-bloque--primero {
+  margin-top: 0;
+}
+
+#ruta .ruta-subcabecera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--borde);
+  margin-bottom: clamp(2.25rem, 1.5rem + 2.5vw, 4rem);
+}
+
+@media (min-width: 900px) {
+  #ruta .ruta-subcabecera {
+    grid-template-columns: minmax(7rem, 2fr) minmax(0, 10fr);
+    gap: var(--gutter);
+  }
+}
+
+#ruta .ruta-subcabecera__ref {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--texto-3);
+  padding-top: 0.35em;
+  font-variant-numeric: tabular-nums;
+}
+
+#ruta .ruta-subcabecera__texto {
+  margin-top: 1rem;
+  max-width: 62ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#ruta .ruta-abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+/* ==========================================================================
+   3.1 Matriz de alineación
+   ========================================================================== */
+#ruta .chip {
+  font-size: 1rem;
+}
+
+#ruta .ruta-chip--palabra {
+  font-family: var(--fuente);
+  font-weight: 560;
+  font-size: var(--t-xs);
+  font-variation-settings: 'wdth' 92;
+  padding-block: 0.4em 0.35em;
+}
+
+#ruta .ruta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+#ruta .ruta-matriz {
+  table-layout: fixed;
+}
+
+#ruta .ruta-matriz__col-codigo {
+  width: 7.5rem;
+}
+
+#ruta .ruta-matriz__col-objetivo {
+  width: 33%;
+}
+
+#ruta .ruta-matriz__col-resultado {
+  width: 27%;
+}
+
+#ruta .ruta-matriz tbody :is(th, td) {
+  padding-block: 1.6rem;
+}
+
+#ruta .ruta-matriz__codigo {
+  display: block;
+  font-family: var(--fuente-matriz);
+  font-weight: 750;
+  font-size: clamp(1.75rem, 1.25rem + 1.3vw, 2.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: var(--texto);
+  font-variant-numeric: tabular-nums;
+}
+
+#ruta .ruta-matriz__objetivo {
+  font-size: var(--t-m);
+  line-height: 1.5;
+  color: var(--texto);
+  text-wrap: pretty;
+}
+
+#ruta .ruta-matriz__resultado {
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* En móvil cada fila se apila como una ficha con sus etiquetas */
+@media (max-width: 759.98px) {
+  #ruta .ruta-matriz,
+  #ruta .ruta-matriz tbody,
+  #ruta .ruta-matriz tr,
+  #ruta .ruta-matriz th,
+  #ruta .ruta-matriz td {
+    display: block;
+  }
+
+  #ruta .ruta-matriz colgroup {
+    display: none;
+  }
+
+  #ruta .ruta-matriz thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  #ruta .ruta-matriz tbody tr {
+    padding: 1.4rem 1.25rem 1.5rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+  }
+
+  #ruta .ruta-matriz tbody tr + tr {
+    margin-top: 0.9rem;
+  }
+
+  #ruta .ruta-matriz tbody :is(th, td) {
+    padding: 0;
+    border: 0;
+  }
+
+  #ruta .ruta-matriz tbody td {
+    margin-top: 1.1rem;
+  }
+
+  #ruta .ruta-matriz tbody td::before {
+    content: attr(data-etiqueta);
+    content: attr(data-etiqueta) / '';
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--fuente);
+    font-size: var(--t-xs);
+    font-weight: 560;
+    font-variation-settings: 'wdth' 86;
+    letter-spacing: 0.015em;
+    line-height: 1.3;
+    color: var(--texto-3);
+  }
+}
+
+/* ==========================================================================
+   3.2 Metodología y etapas
+   Sin anclar (móvil, movimiento reducido o sin JS): paneles apilados.
+   Anclada (.ruta-etapas--anclada, la pone el JS en escritorio): pista horizontal.
+   ========================================================================== */
+#ruta .ruta-etapas__escenario {
+  padding-inline: var(--ruta-alineacion);
+}
+
+#ruta .ruta-etapas__pista {
+  position: relative; /* referencia para medir la posición de cada panel */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+  gap: var(--gutter);
+}
+
+#ruta .ruta-etapa {
+  position: relative;
+  display: flex;
+  container-type: inline-size;
+}
+
+#ruta .ruta-etapa__placa {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'cabeza'
+    'texto'
+    'actividades'
+    'entregable';
+  align-content: start;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 0.9rem + 1.2vw, 2rem);
+  border: 1px solid var(--borde);
+  border-top: 2px solid var(--tono);
+  border-radius: var(--radio);
+  transition: opacity var(--dur-media) var(--ease-suave);
+}
+
+@container (min-width: 34rem) {
+  #ruta .ruta-etapa__placa {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'cabeza actividades'
+      'texto actividades'
+      'entregable entregable';
+    align-content: stretch;
+    column-gap: clamp(1.5rem, 5cqi, 2.75rem);
+  }
+}
+
+#ruta .ruta-etapa__cabeza {
+  grid-area: cabeza;
+}
+
+#ruta .ruta-etapa__titulo {
+  display: grid;
+  gap: 0.85rem;
+  font-weight: inherit;
+}
+
+#ruta .ruta-etapa__codigo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: clamp(3.25rem, min(1.8rem + 4.5vw, 12vh), 6.75rem);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  color: var(--tono);
+  font-variant-numeric: tabular-nums;
+}
+
+#ruta .ruta-etapa__nombre {
+  font-size: var(--t-l);
+  font-weight: 400;
+  font-variation-settings: 'wdth' 106;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--texto);
+  text-wrap: balance;
+}
+
+#ruta .ruta-etapa__cota {
+  margin-top: 1.4rem;
+  margin-bottom: 0.4rem;
+}
+
+#ruta .ruta-etapa__texto {
+  grid-area: texto;
+  align-self: start;
+  max-width: 44ch;
+  font-size: var(--t-s);
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+#ruta .ruta-etapa__actividades {
+  grid-area: actividades;
+  align-self: start;
+}
+
+#ruta .ruta-etapa__actividades .etiqueta {
+  margin-bottom: 0.55rem;
+}
+
+#ruta .ruta-etapa__actividades li {
+  display: grid;
+  grid-template-columns: 3.1rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block: 0.55rem;
+  border-top: 1px solid var(--borde);
+  font-size: var(--t-s);
+  line-height: 1.35;
+}
+
+#ruta .ruta-etapa__actividades li:last-child {
+  border-bottom: 1px solid var(--borde);
+}
+
+#ruta .ruta-etapa__id {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--texto-2);
+  font-variant-numeric: tabular-nums;
+}
+
+#ruta .ruta-etapa__entregable {
+  grid-area: entregable;
+  align-self: end;
+  padding: 0.95rem 1.1rem;
+  border: 1px dashed var(--tono);
+  border-radius: var(--radio);
+  font-size: var(--t-s);
+  line-height: 1.4;
+  color: var(--texto);
+}
+
+#ruta .ruta-etapa__rotulo {
+  font-weight: 560;
+  font-variation-settings: 'wdth' 90;
+  color: var(--texto-2);
+}
+
+/* Esquinas de visor que «enfocan» la etapa activa (solo con la pista anclada) */
+#ruta .ruta-etapa__mira {
+  display: none;
+}
+
+/* La cinta transportadora solo existe con la pista anclada */
+#ruta .ruta-cinta {
+  display: none;
+}
+
+/* ---------- Pista anclada (escritorio) ---------- */
+#ruta .ruta-etapas--anclada .ruta-etapas__escenario {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: safe center;
+  gap: clamp(1.5rem, 4.5vh, 3.25rem);
+  height: 100vh;
+  padding: clamp(4.25rem, 10vh, 6.5rem) 0 clamp(1.5rem, 4vh, 2.75rem);
+  overflow-x: clip;
+}
+
+#ruta .ruta-etapas--anclada .ruta-etapas__pista {
+  display: flex;
+  align-items: stretch;
+  gap: var(--ruta-hueco);
+  width: max-content;
+  padding-inline: var(--ruta-alineacion);
+  will-change: transform;
+}
+
+#ruta .ruta-etapas--anclada .ruta-etapa {
+  flex: 0 0 min(78vw, 760px);
+}
+
+#ruta .ruta-etapas--anclada .ruta-etapa:not(.es-activa) .ruta-etapa__placa {
+  opacity: 0.42;
+}
+
+#ruta .ruta-etapas--anclada .ruta-etapa__mira {
+  --visor-color: var(--texto);
+  --visor-largo: 18px;
+  display: block;
+  position: absolute;
+  inset: -11px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1.025);
+  transition:
+    opacity var(--dur-ui) var(--ease-suave),
+    transform var(--dur-media) var(--ease-salida);
+}
+
+#ruta .ruta-etapas--anclada .ruta-etapa.es-activa .ruta-etapa__mira {
+  opacity: 1;
+  transform: none;
+}
+
+/* Flecha de relevo entre etapas, en el hueco entre paneles */
+#ruta .ruta-etapas--anclada .ruta-etapa:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 4.25rem;
+  left: calc(100% + 0.9rem);
+  width: calc(var(--ruta-hueco) - 1.8rem);
+  height: 9px;
+  background: var(--borde-fuerte);
+  clip-path: polygon(0 4px, calc(100% - 7px) 4px, calc(100% - 7px) 0, 100% 50%, calc(100% - 7px) 100%, calc(100% - 7px) 5px, 0 5px);
+}
+
+/* ---------- Cinta transportadora ---------- */
+#ruta .ruta-etapas--anclada .ruta-cinta {
+  --tono: var(--etapa-1);
+  --paso: 12px; /* separación de las marcas de la correa; el JS la lee para moverla en bucle */
+  display: block;
+  padding-inline: var(--ruta-alineacion);
+}
+
+#ruta .ruta-cinta__lectura {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+#ruta .ruta-cinta__rotulo {
+  font-size: var(--t-xs);
+  font-weight: 560;
+  font-variation-settings: 'wdth' 86;
+  letter-spacing: 0.015em;
+  color: var(--texto-3);
+}
+
+#ruta .ruta-cinta__semana {
+  min-width: 2ch;
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: 0.9;
+  text-align: right;
+  color: var(--texto);
+  font-variant-numeric: tabular-nums;
+}
+
+#ruta .ruta-cinta__etapa {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+#ruta .ruta-cinta__codigo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--tono);
+  transition: color var(--dur-ui) var(--ease-suave);
+}
+
+#ruta .ruta-cinta__nombre {
+  font-size: var(--t-s);
+  color: var(--texto-2);
+}
+
+#ruta .ruta-cinta__via {
+  position: relative;
+  height: 28px;
+}
+
+/* El carro ocupa todo el ancho de la vía: moverlo en xPercent equivale a avanzar en semanas */
+#ruta .ruta-cinta__carro {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  pointer-events: none;
+}
+
+#ruta .ruta-cinta__lote {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 1px;
+  background:
+    linear-gradient(var(--fondo), var(--fondo)) 50% 45% / 100% 1px no-repeat,
+    var(--texto);
+}
+
+#ruta .ruta-cinta__correa {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  border-block: 1px solid var(--texto-3);
+}
+
+#ruta .ruta-cinta__superficie {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  overflow: hidden;
+}
+
+#ruta .ruta-cinta__textura {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: calc(-1 * var(--paso));
+  background: repeating-linear-gradient(90deg, var(--borde-fuerte) 0 1px, transparent 1px var(--paso));
+}
+
+#ruta .ruta-cinta__rodillos {
+  position: absolute;
+  inset: 0 -5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#ruta .ruta-cinta__rodillo {
+  position: relative;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--texto-3);
+  border-radius: 50%;
+  background: var(--fondo);
+  transform: rotate(var(--giro, 0deg));
+}
+
+#ruta .ruta-cinta__rodillo::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 0.5px);
+  top: 0;
+  width: 1px;
+  height: 4px;
+  background: var(--texto-2);
+}
+
+#ruta .ruta-cinta__semanas {
+  display: grid;
+  grid-template-columns: repeat(var(--semanas), minmax(0, 1fr));
+  margin-top: 0.45rem;
+}
+
+#ruta .ruta-cinta__semanas span {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  color: var(--texto-3);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--dur-micro) var(--ease-suave);
+}
+
+#ruta .ruta-cinta__semanas span.es-actual {
+  color: var(--texto);
+}
+
+#ruta .ruta-cinta__tramos {
+  display: grid;
+  grid-template-columns: repeat(var(--semanas), minmax(0, 1fr));
+  grid-auto-rows: 3px;
+  row-gap: 3px;
+  margin-top: 0.55rem;
+}
+
+#ruta .ruta-cinta__tramo {
+  background: var(--tono);
+  opacity: 0.35;
+  transition: opacity var(--dur-ui) var(--ease-suave);
+}
+
+#ruta .ruta-cinta__tramo.es-activa {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   3.3 Cronograma (Gantt)
+   ========================================================================== */
+#ruta .ruta-claves__titulo {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#ruta .ruta-claves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  font-size: var(--t-s);
+  color: var(--texto-2);
+}
+
+#ruta .ruta-claves div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+#ruta .ruta-claves dt {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--texto);
+}
+
+#ruta .ruta-gantt__codigo {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Leyenda de etapas */
+#ruta .ruta-gantt__leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.75rem;
+  margin-bottom: 1.75rem;
+  font-size: var(--t-s);
+  color: var(--texto-2);
+}
+
+#ruta .ruta-gantt__leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#ruta .ruta-gantt__leyenda .ruta-gantt__codigo {
+  color: var(--texto);
+}
+
+#ruta .ruta-gantt__muestra {
+  width: 22px;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--tono);
+}
+
+/* Contenedor desplazable propio: en móvil la tabla mantiene su ancho mínimo */
+#ruta .ruta-gantt__marco {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--borde-fuerte) transparent;
+}
+
+#ruta .ruta-gantt__marco:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: 4px;
+}
+
+#ruta .ruta-gantt__lienzo {
+  position: relative;
+  min-width: 880px;
+}
+
+#ruta .ruta-gantt__tabla {
+  table-layout: fixed;
+}
+
+#ruta .ruta-gantt__col-id {
+  width: 4.5rem;
+}
+
+#ruta .ruta-gantt__col-actividad {
+  width: 26%;
+}
+
+#ruta .ruta-gantt__col-resp {
+  width: 5.5rem;
+}
+
+#ruta .ruta-gantt__col-precede {
+  width: 6rem;
+}
+
+#ruta .ruta-gantt__tabla :is(th, td) {
+  padding: 0.7rem 0.75rem;
+  vertical-align: middle;
+  transition:
+    color var(--dur-ui) var(--ease-suave),
+    background-color var(--dur-ui) var(--ease-suave);
+}
+
+#ruta .ruta-gantt__tabla thead th {
+  vertical-align: bottom;
+  padding-bottom: 0.6rem;
+}
+
+/* Primera columna fija al desplazar en horizontal */
+#ruta .ruta-gantt__tabla :is(thead, tbody) th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: var(--fondo);
+}
+
+/* Cabecera de semanas: cota y regla graduada */
+#ruta .ruta-gantt__tabla .ruta-gantt__th-semanas {
+  padding-inline: 0;
+}
+
+#ruta .ruta-gantt__cota {
+  margin: 0.5rem 0 1.15rem;
+}
+
+#ruta .ruta-gantt__regla {
+  display: grid;
+  grid-template-columns: repeat(var(--semanas), minmax(0, 1fr));
+}
+
+#ruta .ruta-gantt__regla span {
+  font-family: var(--fuente-matriz);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1;
+  text-align: center;
+  color: var(--texto-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Celda de semanas: la retícula de 16 columnas corre continua de fila a fila */
+#ruta .ruta-gantt__tabla .ruta-gantt__celda {
+  padding-inline: 0;
+  background-image: linear-gradient(to right, var(--borde) 1px, transparent 1px);
+  background-size: calc(100% / var(--semanas)) 100%;
+}
+
+#ruta .ruta-gantt__pista {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--semanas), minmax(0, 1fr));
+  align-items: center;
+}
+
+#ruta .ruta-gantt__barra {
+  grid-row: 1;
+  height: 12px;
+  margin-inline: 1px;
+  border-radius: 1px;
+  background: var(--tono);
+  transform-origin: 0 50%;
+  transition: opacity var(--dur-ui) var(--ease-suave);
+}
+
+/* Capa de dependencias */
+#ruta .ruta-gantt__dependencias {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+#ruta .ruta-gantt__conector {
+  transition: opacity var(--dur-ui) var(--ease-suave);
+}
+
+#ruta .ruta-gantt__halo {
+  fill: none;
+  stroke: var(--fondo);
+  stroke-width: 5;
+}
+
+#ruta .ruta-gantt__traza {
+  fill: none;
+  stroke: var(--texto-3);
+  stroke-width: 1.25;
+  transition: stroke var(--dur-ui) var(--ease-suave);
+}
+
+#ruta .ruta-gantt__punta,
+#ruta .ruta-gantt__via {
+  fill: var(--texto-3);
+  transition: fill var(--dur-ui) var(--ease-suave);
+}
+
+/* Filas enfocables: foco visible y resaltado de predecesoras y sucesoras */
+#ruta .ruta-gantt__tabla tbody tr[tabindex] {
+  cursor: default;
+}
+
+#ruta .ruta-gantt__tabla tbody tr:focus-visible {
+  outline: 2px solid var(--texto);
+  outline-offset: -2px;
+}
+
+#ruta .ruta-gantt--foco tbody :is(th, td) {
+  color: var(--texto-3);
+}
+
+#ruta .ruta-gantt--foco tbody tr:is(.es-foco, .es-antecesora, .es-sucesora) :is(th, td) {
+  color: var(--texto);
+}
+
+#ruta .ruta-gantt--foco tbody tr.es-foco :is(th, td) {
+  background-color: var(--superficie);
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__barra {
+  opacity: 0.22;
+}
+
+#ruta .ruta-gantt--foco tr:is(.es-foco, .es-antecesora, .es-sucesora) .ruta-gantt__barra {
+  opacity: 1;
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__conector {
+  opacity: 0.16;
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__conector.es-vecina {
+  opacity: 1;
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__conector.es-vecina .ruta-gantt__traza {
+  stroke: var(--texto);
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__conector.es-vecina :is(.ruta-gantt__punta, .ruta-gantt__via) {
+  fill: var(--texto);
+}
+
+/* Lectura bajo la tabla: la ayuda y el dato ocupan la misma celda */
+#ruta .ruta-gantt__lectura {
+  display: grid;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+  min-height: 3.4rem;
+}
+
+#ruta .ruta-gantt__lectura[hidden] {
+  display: none;
+}
+
+#ruta .ruta-gantt__ayuda,
+#ruta .ruta-gantt__dato {
+  grid-area: 1 / 1;
+  max-width: 68ch;
+}
+
+#ruta .ruta-gantt__ayuda {
+  font-size: var(--t-s);
+  color: var(--texto-3);
+}
+
+#ruta .ruta-gantt--foco .ruta-gantt__ayuda {
+  visibility: hidden;
+}
+
+#ruta .ruta-gantt__dato {
+  font-size: var(--t-l);
+  font-variation-settings: 'wdth' 104;
+  line-height: 1.35;
+  color: var(--texto);
+}
+
+#ruta .ruta-gantt__dato .ruta-gantt__codigo {
+  font-size: 1.25rem;
+}

@@ -1,0 +1,195 @@
+/* ==========================================================================
+   1.6 Referentes · tres columnas de inspección y la placa de la brecha
+   ========================================================================== */
+
+#referentes .referentes__escaner {
+  position: relative;
+}
+
+#referentes .referentes__lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+
+#referentes .referentes__item {
+  padding-block: 2.25rem 2.5rem;
+}
+
+#referentes .referentes__item + .referentes__item {
+  border-top: 1px solid var(--borde);
+}
+
+#referentes .referentes__nombre {
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+#referentes .referentes__datos {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+}
+
+#referentes .referentes__dato dd {
+  margin-top: 0.4rem;
+  max-width: 34ch;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* «Qué le falta» lleva la muestra de rayado: en un plano, el rayado marca la zona que no existe */
+#referentes .referentes__dato--falta dt {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+#referentes .referentes__dato--falta dt::before {
+  content: '';
+  flex: none;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid var(--borde-fuerte);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 2.5px,
+    var(--texto-3) 2.5px 3.5px
+  );
+}
+
+#referentes .referentes__dato--falta dd {
+  color: var(--texto);
+}
+
+/* Haz del escáner: lo crea referentes.js solo cuando hay movimiento */
+#referentes .referentes__haz {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--texto);
+  pointer-events: none;
+}
+
+/* Estela que deja el haz al avanzar hacia la derecha */
+#referentes .referentes__haz::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 1px;
+  width: clamp(48px, 9vw, 140px);
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--texto) 9%, transparent));
+}
+
+/* Remates del haz, como los de una cota */
+#referentes .referentes__haz::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  background:
+    linear-gradient(var(--texto), var(--texto)) 0 0 / 100% 1px no-repeat,
+    linear-gradient(var(--texto), var(--texto)) 0 100% / 100% 1px no-repeat;
+}
+
+/* ---------- La brecha ---------- */
+#referentes .referentes__cierre {
+  margin-top: clamp(3.5rem, 2.5rem + 3.5vw, 6rem);
+}
+
+#referentes .referentes__brecha {
+  --visor-color: var(--texto-2);
+  --visor-largo: 22px;
+  grid-column: 1 / -1;
+  padding: clamp(2rem, 1.2rem + 3.2vw, 4.5rem);
+  /* .visor reescribe el fondo con sus esquinas; el color de placa va debajo */
+  background-color: var(--superficie);
+}
+
+#referentes .referentes__brecha-texto {
+  margin-top: 1rem;
+  max-width: 34ch;
+  font-size: clamp(1.375rem, 1rem + 1.2vw, var(--t-xl));
+  font-weight: 300;
+  font-variation-settings: 'wdth' 108;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--texto);
+  text-wrap: pretty;
+}
+
+/* Mientras dura la animación las esquinas son piezas sueltas (ver referentes.js) */
+#referentes .referentes__brecha--animada {
+  background-image: none;
+}
+
+#referentes .referentes__esquina {
+  position: absolute;
+  width: var(--visor-largo);
+  height: var(--visor-largo);
+  border: 0 solid var(--visor-color);
+  pointer-events: none;
+}
+
+#referentes .referentes__esquina--ai {
+  top: 0;
+  left: 0;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+#referentes .referentes__esquina--ad {
+  top: 0;
+  right: 0;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+#referentes .referentes__esquina--bi {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+#referentes .referentes__esquina--bd {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* ---------- Escritorio: tres columnas separadas por filetes verticales ---------- */
+@media (min-width: 900px) {
+  #referentes .referentes__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #referentes .referentes__item {
+    padding: clamp(2.25rem, 1.5rem + 1.5vw, 3.25rem) var(--gutter) clamp(2.5rem, 1.75rem + 1.5vw, 3.5rem);
+  }
+
+  #referentes .referentes__item + .referentes__item {
+    border-top: 0;
+    border-left: 1px solid var(--borde);
+  }
+
+  #referentes .referentes__item:first-child {
+    padding-left: 0;
+  }
+
+  #referentes .referentes__item:last-child {
+    padding-right: 0;
+  }
+
+  /* Asimetría: la brecha queda desplazada a la derecha, más allá de lo que ya existe */
+  #referentes .referentes__brecha {
+    grid-column: 5 / -1;
+  }
+}
